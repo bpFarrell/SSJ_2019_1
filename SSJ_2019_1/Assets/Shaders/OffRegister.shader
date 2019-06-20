@@ -59,15 +59,15 @@
 
 			fixed4 frag(v2f i) : SV_Target
 			{
-				//return fixed4(1,0,0,1);
+				float2 texel = 1 / _ScreenParams.xy;
                 fixed4 col1 = tex2D(_MainTex, i.uv);
 				fixed4 cmyk1 = rgb2cmyk(col1.rgb);
 
-				fixed4 col2 = tex2D(_MainTex, i.uv + _Offset1.xy * _Offset2.z);
+				fixed4 col2 = tex2D(_MainTex, i.uv + texel * _Offset1.xy * _Offset2.z);
 				fixed4 cmyk2 = rgb2cmyk(col2.rgb);
-				fixed4 col3 = tex2D(_MainTex, i.uv + _Offset1.zw * _Offset2.z);
+				fixed4 col3 = tex2D(_MainTex, i.uv + texel * _Offset1.zw * _Offset2.z);
 				fixed4 cmyk3 = rgb2cmyk(col3.rgb);
-				fixed4 col4 = tex2D(_MainTex, i.uv + _Offset2.xy* _Offset2.z);
+				fixed4 col4 = tex2D(_MainTex, i.uv + texel * _Offset2.xy* _Offset2.z);
 				fixed4 cmyk4 = rgb2cmyk(col4.rgb);
 
 

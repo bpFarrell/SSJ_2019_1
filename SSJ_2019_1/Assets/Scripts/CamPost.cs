@@ -14,7 +14,7 @@ public class CamPost : MonoBehaviour
     {
         cam = GetComponent<Camera>();
         cam.depthTextureMode = DepthTextureMode.DepthNormals;
-        tempRT = new RenderTexture(Screen.width/2, Screen.height/2, 0);
+        tempRT = new RenderTexture(Screen.width, Screen.height, 0);
 
     }
 

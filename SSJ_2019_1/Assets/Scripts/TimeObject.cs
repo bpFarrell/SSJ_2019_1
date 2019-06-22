@@ -2,12 +2,15 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class TimeObject : MonoBehaviour
-{
-    public float t;
-    public float spawnTime;
+public class TimeObject : MonoBehaviour, ITimeObject {
     public Vector3 dir;
-    public Vector3 startpos;
+
+    public float t { get; set; }
+    public float spawnTime { get; set; }
+    public float deathTime { get; set; }
+    public Vector3 startpos { get; set; }
+    public IEvaluable evaluable { get; set; }
+
     // Start is called before the first frame update
     void Start()
     {

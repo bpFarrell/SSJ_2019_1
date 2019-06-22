@@ -15,7 +15,8 @@ public class BulletPool : MonoBehaviour, ITimeObject {
     public float deathTime { get; set; }
     public Vector3 startpos { get; set; }
     public IEvaluable evaluable { get; set; }
-
+    public float splitTime = 1000;
+    public bool didSplit = false;
     bool dead;
 
     public Vector3 dir;
@@ -48,25 +49,38 @@ public class BulletPool : MonoBehaviour, ITimeObject {
     }
     public void Init(IEvaluable parentEval) {
         evaluable.eval = (t) => { return parentEval.eval(spawnTime) + t * dir + curve * Mathf.Pow(t, 2); };
+        Update();
     }
     public virtual void MarkComplete() {
         activeItem.Remove(this);
         pooledItems.Add(this);
         gameObject.SetActive(false);
+        transform.localScale = Vector3.one;
+        splitTime = 1000;
     }
     public virtual void MarkActive() {
 
     }
     public void Update() {
-        if (dead && t > 0) {
-            mr.enabled = true;
-            dead = false;
-        } else if (!dead && t <= 0) {
-            mr.enabled = false;
-            dead = true;
+        if (t < 0) {
+            MarkComplete();
+            return;
         }
         transform.position = evaluable.eval(t);
-        //if (Time.time > killAt)
-            //MarkComplete();
+
+        if (GameManager.time < t+splitTime&&didSplit) {
+            didSplit = false;
+        }
+        if (GameManager.time > t + splitTime&&!didSplit) {
+            didSplit = true;
+            for(int x = 0; x < 8; x++) {
+                float angle = ((float)x) / 8;
+                BulletPool obj = BulletPool.GetObject();
+                obj.spawnTime = spawnTime;
+                obj.dir = new Vector3(Mathf.Sin(angle * 2 * 3.141529f), -Mathf.Cos(angle * 2 * 3.141529f), 0);
+                obj.Init(evaluable);
+                obj.transform.localScale *= 0.2f;
+            }
+        }
     }
 }

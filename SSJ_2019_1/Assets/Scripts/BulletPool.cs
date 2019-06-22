@@ -7,6 +7,7 @@ public class BulletPool : MonoBehaviour, ITimeObject {
     private static List<BulletPool> pooledItems = new List<BulletPool>();
     private static GameObject holder;
     MeshRenderer mr;
+    [SerializeField]
     public float t { get {
             return GameManager.time - spawnTime;
         }
@@ -15,7 +16,8 @@ public class BulletPool : MonoBehaviour, ITimeObject {
     public float deathTime { get; set; }
     public Vector3 startpos { get; set; }
     public IEvaluable evaluable { get; set; }
-    public float splitTime = 1000;
+    public float parentAgeAtBirth;
+    public float splitTime = 2;
     public bool didSplit = false;
     bool dead;
 
@@ -48,7 +50,8 @@ public class BulletPool : MonoBehaviour, ITimeObject {
         Debug.Log("Pooling more! pool is at "+(pooledItems.Count+activeItem.Count));
     }
     public void Init(IEvaluable parentEval) {
-        evaluable.eval = (t) => { return parentEval.eval(spawnTime) + t * dir + curve * Mathf.Pow(t, 2); };
+        evaluable.eval = (t) => { return parentEval.eval(parentAgeAtBirth) + t * dir + curve * Mathf.Pow(t, 2); };
+        deathTime = spawnTime + 2;
         Update();
     }
     public virtual void MarkComplete() {
@@ -56,7 +59,7 @@ public class BulletPool : MonoBehaviour, ITimeObject {
         pooledItems.Add(this);
         gameObject.SetActive(false);
         transform.localScale = Vector3.one;
-        splitTime = 1000;
+        //splitTime = 1000;
     }
     public virtual void MarkActive() {
 
@@ -68,16 +71,18 @@ public class BulletPool : MonoBehaviour, ITimeObject {
         }
         transform.position = evaluable.eval(t);
 
-        if (GameManager.time < t+splitTime&&didSplit) {
+        if (t< splitTime&&didSplit) {
             didSplit = false;
         }
-        if (GameManager.time > t + splitTime&&!didSplit) {
+        if (t>splitTime&&!didSplit) {
             didSplit = true;
+            return;
             for(int x = 0; x < 8; x++) {
                 float angle = ((float)x) / 8;
                 BulletPool obj = BulletPool.GetObject();
-                obj.spawnTime = spawnTime;
+                obj.spawnTime = spawnTime+splitTime;
                 obj.dir = new Vector3(Mathf.Sin(angle * 2 * 3.141529f), -Mathf.Cos(angle * 2 * 3.141529f), 0);
+                obj.parentAgeAtBirth = GameManager.time - spawnTime;
                 obj.Init(evaluable);
                 obj.transform.localScale *= 0.2f;
             }

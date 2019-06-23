@@ -9,12 +9,9 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 0b4146bc08fbcbc48b8b7d497ae19323, type: 3}
-  m_Name: tightCone
+  m_Script: {fileID: 11500000, guid: 381f47d491e35104c8192fea89c59e0c, type: 3}
+  m_Name: Utility
   m_EditorClassIdentifier: 
-  _name: Tight cone
-  _cost: 1
-  _type: 0
-  _description: 
-  _flavor: 
-  _assetName: tightCone
+  primary: {r: 0.24870951, g: 0.60208136, b: 0.764151, a: 1}
+  secondary: {r: 0.520502, g: 0.5359082, b: 0.7372549, a: 1}
+  hue: {r: 0.22745097, g: 0.23995598, b: 0.84705883, a: 1}

@@ -12,3 +12,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0b4146bc08fbcbc48b8b7d497ae19323, type: 3}
   m_Name: increasedSpeed
   m_EditorClassIdentifier: 
+  _name: Increased Speed
+  _cost: 1
+  _type: 1
+  _description: Increases the <b>Max Range</b> you can move in a turn.
+  _flavor: 
+  _assetName: increasedSpeed

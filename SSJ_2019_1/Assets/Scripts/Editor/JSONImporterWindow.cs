@@ -31,17 +31,27 @@ public class JSONImporterWindow : EditorWindow
         if (GUILayout.Button("Process"))
         {
             DirectoryCheck();
+            Texture2D tex = new Texture2D(256, 256);
+            Color[] color = tex.GetPixels();
+            for (int y = 0; y < tex.width; y++) {
+                if (y > 42 && y < tex.width - 42) continue;
+                for (int x = 0; x < tex.height; x++) {
+                    color[x + (y * tex.width)] = Color.black;
+                }
+            }
+            tex.SetPixels(color);
+            byte[] data = tex.EncodeToPNG();
+
             for (int i = 0; i < json.Count; i++) {
                 CardDefinition card = CreateInstance<CardDefinition>();
                 card.FromJSON(json[i]);
 
                 AssetDatabase.CreateAsset(card, "Assets/CardDefinitions/" + card.assetName + ".asset");
 
-                Texture2D tex = new Texture2D(256, 256);
-                byte[] data = tex.EncodeToPNG();
-
-                if (!File.Exists(Application.dataPath + "/CardDefinitions/" + card.assetName + ".png")) File.Create(Application.dataPath + "/CardDefinitions/" + card.assetName + ".png").Close();
-                File.WriteAllBytes(Application.dataPath + "/CardDefinitions/" + card.assetName + ".png", data);
+                if (!File.Exists(Application.dataPath + "/CardDefinitions/Resources/" + card.assetName + ".png")) {
+                    File.Create(Application.dataPath + "/CardDefinitions/Resources/" + card.assetName + ".png").Close();
+                    File.WriteAllBytes(Application.dataPath + "/CardDefinitions/Resources/" + card.assetName + ".png", data);
+                }
             }
         }
         GUILayout.Space(20f);
@@ -53,6 +63,8 @@ public class JSONImporterWindow : EditorWindow
     private void DirectoryCheck() {
         if (!Directory.Exists(Application.dataPath + "/CardDefinitions/"))
             Directory.CreateDirectory(Application.dataPath + "/CardDefinitions/");
+        if (!Directory.Exists(Application.dataPath + "/CardDefinitions/Resources/"))
+            Directory.CreateDirectory(Application.dataPath + "/CardDefinitions/Resources/");
     }
 }
 

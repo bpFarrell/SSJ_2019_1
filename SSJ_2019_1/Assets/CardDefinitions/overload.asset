@@ -12,3 +12,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0b4146bc08fbcbc48b8b7d497ae19323, type: 3}
   m_Name: overload
   m_EditorClassIdentifier: 
+  _name: Overload
+  _cost: 1
+  _type: 0
+  _description: Only play <b>Power</b> cards for the next 2 turns, but double <b>projectile
+    count</b>.
+  _flavor: 
+  _assetName: overload

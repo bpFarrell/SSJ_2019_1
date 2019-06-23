@@ -12,3 +12,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0b4146bc08fbcbc48b8b7d497ae19323, type: 3}
   m_Name: reloadPierce
   m_EditorClassIdentifier: 
+  _name: 'Reload: Pierce'
+  _cost: 1
+  _type: 0
+  _description: Projects now <b>Penetrates</b> targets.
+  _flavor: 
+  _assetName: reloadPierce

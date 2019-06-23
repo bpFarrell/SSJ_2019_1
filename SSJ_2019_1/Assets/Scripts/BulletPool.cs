@@ -1,28 +1,15 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-
-public class BulletPool : MonoBehaviour, ITimeObject {
+public class BulletPool : TimeObject {
     private static List<BulletPool> activeItem = new List<BulletPool>();
     private static List<BulletPool> pendingItems = new List<BulletPool>();
     private static List<BulletPool> pooledItems = new List<BulletPool>();
     private static GameObject holder;
     MeshRenderer mr;
-    [SerializeField]
-    public float t { get {
-            return GameManager.time - spawnTime;
-        }
-        set { } }
-    public float spawnTime { get; set; }
-    public float deathTime { get; set; }
-    public Vector3 startpos { get; set; }
-    public IEvaluable evaluable { get; set; }
-    public float parentAgeAtBirth;
+    static int spawnCount;
     public float splitTime = 2;
     public bool didSplit = false;
-    bool dead;
-
-    public Vector3 dir;
     public Vector3 curve;
     void Awake() {
         mr = GetComponent<MeshRenderer>();
@@ -42,15 +29,17 @@ public class BulletPool : MonoBehaviour, ITimeObject {
             holder = new GameObject("poolHolder");
         for (int x = 0; x < count; x++) {
             GameObject go = GameObject.CreatePrimitive(PrimitiveType.Quad);
+            go.name = "pooled " + spawnCount;
+            spawnCount++;
             go.transform.parent = holder.transform;
             go.SetActive(false);
             BulletPool obj = go.AddComponent<BulletPool>();
             pooledItems.Add(obj);
         }
-        Debug.Log("Pooling more! pool is at "+(pooledItems.Count+activeItem.Count));
+        Debug.Log("Pooling more! pool is at "+(pooledItems.Count+activeItem.Count+pendingItems.Count));
     }
     public void Init(IEvaluable parentEval) {
-        MarkPolledToActive();
+        //MarkPolledToActive();
         evaluable.eval = (t) => { return parentEval.eval(parentAgeAtBirth) + t * dir + curve * Mathf.Pow(t, 2); };
         Update();
     }
@@ -66,33 +55,25 @@ public class BulletPool : MonoBehaviour, ITimeObject {
         pooledItems.Remove(this);
         activeItem.Add(this);
         gameObject.SetActive(true);
+        mr.enabled = true;
     }
     public virtual void MarkActiveToPending() {
         dead = true;
         mr.enabled = false;
         activeItem.Remove(this);
-        pooledItems.Add(this);
+        pendingItems.Add(this);
     }
     public virtual void MarkPendingToActive() {
         dead = false;
         mr.enabled = true;
-        pooledItems.Remove(this);
+        pendingItems.Remove(this);
         activeItem.Add(this);
     }
     public void Update() {
-        if (t < 0) {
-            MarkActiveToPooled();
-            return;
-        }
-        CheckDeath();
-        transform.position = evaluable.eval(t);
-
-        if (t< splitTime&&didSplit) {
-            didSplit = false;
-        }
+        TimeUpdate();
+        if (dead) return;
         if (t>splitTime&&!didSplit) {
             didSplit = true;
-            return;
             for(int x = 0; x < 8; x++) {
                 float angle = ((float)x) / 8;
                 BulletPool obj = BulletPool.GetObject();
@@ -101,15 +82,26 @@ public class BulletPool : MonoBehaviour, ITimeObject {
                 obj.parentAgeAtBirth = GameManager.time - spawnTime;
                 obj.Init(evaluable);
                 obj.transform.localScale *= 0.2f;
+                obj.deathTime = 4;
+                obj.splitTime = 100;
             }
         }
+        CheckCounts();
     }
-    void CheckDeath() {
-        if (t > deathTime && !dead) {
-            MarkActiveToPending();
-        } else if (t < deathTime && dead) {
-            MarkPendingToActive();
+    void CheckCounts() {
+        int currentCount = pooledItems.Count + activeItem.Count + pendingItems.Count;
+        if (currentCount != spawnCount) {
+            Debug.LogError(" MISSSS MATCH!!!!!");
         }
-        
     }
+    public override void BeforeBirth() {
+        MarkActiveToPooled();
+    }
+    public override void AfterNaturalDeath() {
+        MarkActiveToPending();
+    }
+    public override void Resurrect() {
+        MarkPendingToActive();
+    }
+
 }

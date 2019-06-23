@@ -32,6 +32,7 @@ public class GameManager : MonoBehaviour {
     }
     private void Update() {
         _time = time;
+        Shader.SetGlobalFloat("_T", time);
         Player player = ReInput.players.GetPlayer(0);
         float rewind = player.GetAxis("Rewind");
         float fastf = player.GetAxis("Fastforward");

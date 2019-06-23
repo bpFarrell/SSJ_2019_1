@@ -6,7 +6,7 @@ using UnityEngine;
 public class PlayerController : MonoBehaviour, ITimeObject
 {
     public float moveSpeed = 1;
-    public float moveTimeScalar = 0.1f;
+    public float moveTimeScalar = 1f;
     List<Vector3> poses = new List<Vector3>();
     float poseSaveIntervals = 0.1f;
     int currentFrame { get { return Mathf.FloorToInt(GameManager.time / poseSaveIntervals); } }
@@ -32,7 +32,7 @@ public class PlayerController : MonoBehaviour, ITimeObject
         Player player = ReInput.players.GetPlayer(0);
         Vector3 dir = new Vector3(player.GetAxis("MoveHori"), player.GetAxis("MoveVert"), 0);
         if (dir.magnitude > Mathf.Epsilon) {
-            GameManager.time += dir.magnitude * moveTimeScalar;
+            GameManager.time += dir.magnitude * Time.deltaTime * moveTimeScalar;
             CullBranch();
         }
         transform.position += dir*moveSpeed;
@@ -73,7 +73,7 @@ public class PlayerController : MonoBehaviour, ITimeObject
             percentThroughFrame);
     }
     void TryShoot() {
-
+        return;
         if (GameManager.time < lastSpawn) {
             lastSpawn -= spawnRate;
         }

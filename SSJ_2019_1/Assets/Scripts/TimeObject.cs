@@ -10,7 +10,7 @@ public class TimeObject : MonoBehaviour, ITimeObject {
     public float deathTime { get; set; }
     public Vector3 startpos { get; set; }
     public IEvaluable evaluable { get; set; }
-    public TimeState timeState { get ; set; }
+    public TimeState timeState { get; set; }
     public float parentAgeAtBirth { get; set; }
     public bool dead;
     // Start is called before the first frame update
@@ -55,5 +55,16 @@ public class TimeObject : MonoBehaviour, ITimeObject {
     /// </summary>
     public virtual void Birth() {
 
+    }
+    public void OnDrawGizmosSelected() {
+        Gizmos.color = Color.green;
+        Gizmos.DrawSphere(evaluable.eval(0),0.5f);
+
+        Gizmos.color = Color.red;
+        Gizmos.DrawSphere(evaluable.eval(deathTime), 0.5f);
+        Gizmos.color = Color.cyan;
+        for (float x = 0.1f; x < deathTime; x += 0.1f) {
+            Gizmos.DrawLine(evaluable.eval(x), evaluable.eval(x - 0.1f));
+        }
     }
 }

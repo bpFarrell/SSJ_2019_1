@@ -36,7 +36,8 @@ public class GameManager : MonoBehaviour {
         Player player = ReInput.players.GetPlayer(0);
         float rewind = player.GetAxis("Rewind");
         float fastf = player.GetAxis("Fastforward");
-        time += Mathf.Pow(fastf,4) * Time.deltaTime*4;
-        time -= Mathf.Pow(rewind,4) * Time.deltaTime*4;
+        time += Mathf.Pow(fastf,4) * Time.deltaTime*10;
+        time -= Mathf.Pow(rewind,4) * Time.deltaTime*10;
+        //time = Mathf.Clamp(time,12, 22);
     }
 }

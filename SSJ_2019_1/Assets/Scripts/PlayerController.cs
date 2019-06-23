@@ -17,6 +17,9 @@ public class PlayerController : MonoBehaviour, ITimeObject
     public float deathTime { get; set; }
     public Vector3 startpos { get; set; }
     public IEvaluable evaluable { get; set; }
+    public TimeState timeState { get; set; }
+    public float parentAgeAtBirth { get; set ; }
+
     float lastSpawn;
     float spawnRate = 1;
     private void Awake() {
@@ -64,7 +67,6 @@ public class PlayerController : MonoBehaviour, ITimeObject
         float percentThroughFrame =(time - currentFrameTime) / poseSaveIntervals;
         int nowFrame = Mathf.Min(currentFrame, poses.Count - 1);
         int nextFrame = Mathf.Min(currentFrame + 1, poses.Count - 1);
-        Debug.Log(poses.Count + ", " + currentFrame + "=" + nextFrame);
         return Vector3.Lerp(
             poses[nowFrame],
             poses[nextFrame],
@@ -80,9 +82,11 @@ public class PlayerController : MonoBehaviour, ITimeObject
             BulletPool obj = BulletPool.GetObject();
             obj.spawnTime = lastSpawn;
             obj.parentAgeAtBirth = lastSpawn;
-            obj.splitTime = 2;
+            obj.splitTime = 9.9f;
+            obj.deathTime = 10;
             obj.dir = (Vector3.right) * 3;
             obj.Init(evaluable);
+            
         }
     }
 }

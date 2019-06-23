@@ -17,14 +17,12 @@ public class PlayerController : MonoBehaviour, ITimeObject
     public float deathTime { get; set; }
     public Vector3 startpos { get; set; }
     public IEvaluable evaluable { get; set; }
-
-    // Start is called before the first frame update
-    void Start()
-    {
-        
-    }
-
-    // Update is called once per frame
+    float lastSpawn;
+    float spawnRate = 1;
+    private void Awake() {
+        evaluable = new IEvaluable();
+        evaluable.eval = (t) => { return GetPosAtTime(t); };
+    }    
     void Update()
     {
 
@@ -36,11 +34,11 @@ public class PlayerController : MonoBehaviour, ITimeObject
         }
         transform.position += dir*moveSpeed;
         TryRecordPos();
+        TryShoot();
     }
     void TryRecordPos() {
         float lastSnap = ((float)poses.Count) * poseSaveIntervals;
         if (lastSnap < GameManager.time) {
-            Debug.Log("Snapping! " + poses.Count);
             poses.Add(transform.position);
         }
         if(lastSnap - poseSaveIntervals > GameManager.time) {
@@ -60,5 +58,31 @@ public class PlayerController : MonoBehaviour, ITimeObject
         Vector3 newPos = Vector3.Lerp(poses[currentFrame], poses[currentFrame + 1], percentThroughFrame);
         return newPos;
     }
+    Vector3 GetPosAtTime(float time) {
+        int currentFrame = Mathf.FloorToInt(time / poseSaveIntervals); 
+        float currentFrameTime = currentFrame * poseSaveIntervals; 
+        float percentThroughFrame =(time - currentFrameTime) / poseSaveIntervals;
+        int nowFrame = Mathf.Min(currentFrame, poses.Count - 1);
+        int nextFrame = Mathf.Min(currentFrame + 1, poses.Count - 1);
+        Debug.Log(poses.Count + ", " + currentFrame + "=" + nextFrame);
+        return Vector3.Lerp(
+            poses[nowFrame],
+            poses[nextFrame],
+            percentThroughFrame);
+    }
+    void TryShoot() {
 
+        if (GameManager.time < lastSpawn) {
+            lastSpawn -= spawnRate;
+        }
+        if (GameManager.time > lastSpawn + spawnRate) {
+            lastSpawn += spawnRate;
+            BulletPool obj = BulletPool.GetObject();
+            obj.spawnTime = lastSpawn;
+            obj.parentAgeAtBirth = lastSpawn;
+            obj.splitTime = 2;
+            obj.dir = (Vector3.right) * 3;
+            obj.Init(evaluable);
+        }
+    }
 }

@@ -4,6 +4,7 @@ using UnityEngine;
 
 public class BulletPool : MonoBehaviour, ITimeObject {
     private static List<BulletPool> activeItem = new List<BulletPool>();
+    private static List<BulletPool> pendingItems = new List<BulletPool>();
     private static List<BulletPool> pooledItems = new List<BulletPool>();
     private static GameObject holder;
     MeshRenderer mr;
@@ -26,15 +27,14 @@ public class BulletPool : MonoBehaviour, ITimeObject {
     void Awake() {
         mr = GetComponent<MeshRenderer>();
         evaluable = new IEvaluable();
+        deathTime = 10;
     }
     public static BulletPool GetObject() {
         if (pooledItems.Count == 0) {
             PopulatePool(100);
         }
         BulletPool obj = pooledItems[0];
-        pooledItems.RemoveAt(0);
-        activeItem.Add(obj);
-        obj.gameObject.SetActive(true);
+        obj.MarkPolledToActive();
         return obj;
     }
     public static void PopulatePool(int count) {
@@ -50,25 +50,41 @@ public class BulletPool : MonoBehaviour, ITimeObject {
         Debug.Log("Pooling more! pool is at "+(pooledItems.Count+activeItem.Count));
     }
     public void Init(IEvaluable parentEval) {
+        MarkPolledToActive();
         evaluable.eval = (t) => { return parentEval.eval(parentAgeAtBirth) + t * dir + curve * Mathf.Pow(t, 2); };
-        deathTime = spawnTime + 2;
         Update();
     }
-    public virtual void MarkComplete() {
+    public virtual void MarkActiveToPooled() {
         activeItem.Remove(this);
         pooledItems.Add(this);
         gameObject.SetActive(false);
         transform.localScale = Vector3.one;
         //splitTime = 1000;
     }
-    public virtual void MarkActive() {
-
+    public virtual void MarkPolledToActive() {
+        dead = false;
+        pooledItems.Remove(this);
+        activeItem.Add(this);
+        gameObject.SetActive(true);
+    }
+    public virtual void MarkActiveToPending() {
+        dead = true;
+        mr.enabled = false;
+        activeItem.Remove(this);
+        pooledItems.Add(this);
+    }
+    public virtual void MarkPendingToActive() {
+        dead = false;
+        mr.enabled = true;
+        pooledItems.Remove(this);
+        activeItem.Add(this);
     }
     public void Update() {
         if (t < 0) {
-            MarkComplete();
+            MarkActiveToPooled();
             return;
         }
+        CheckDeath();
         transform.position = evaluable.eval(t);
 
         if (t< splitTime&&didSplit) {
@@ -87,5 +103,13 @@ public class BulletPool : MonoBehaviour, ITimeObject {
                 obj.transform.localScale *= 0.2f;
             }
         }
+    }
+    void CheckDeath() {
+        if (t > deathTime && !dead) {
+            MarkActiveToPending();
+        } else if (t < deathTime && dead) {
+            MarkPendingToActive();
+        }
+        
     }
 }

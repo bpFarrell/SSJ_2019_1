@@ -28,7 +28,7 @@ public class BossBulletSpam : TimeObject
 
             alternate = !alternate;
             Volley();
-            //WaveSpawn();
+            WaveSpawn();
         }
     }
     public void WaveSpawn() {
@@ -40,7 +40,7 @@ public class BossBulletSpam : TimeObject
             obj.spawnTime = lastSpawn;
             obj.parentAgeAtBirth = lastSpawn;
             obj.splitTime = 1000f;
-            obj.deathTime = 100;
+            obj.scheduledDeathTime = 100;
             obj.dir = new Vector3(
                 -Mathf.Sin(angle * 3.141529f),
                 -Mathf.Cos(angle * 3.141529f),
@@ -56,7 +56,7 @@ public class BossBulletSpam : TimeObject
             obj.spawnTime = lastSpawn;
             obj.parentAgeAtBirth = lastSpawn;
             obj.splitTime = 1000f;
-            obj.deathTime = 20;
+            obj.scheduledDeathTime = 20;
             obj.dir = new Vector3(
                 -1+((float)4-x)*0.1f,
                 (alternate ? 2 : -2),

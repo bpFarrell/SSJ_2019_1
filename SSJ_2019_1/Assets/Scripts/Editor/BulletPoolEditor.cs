@@ -7,13 +7,13 @@ public class BulletPoolEditor : Editor
     private void OnEnable() { }
 
     public override void OnInspectorGUI() {
-        BulletPool[] scripts = (BulletPool[])targets;
+        //BulletPool[] scripts = (BulletPool[])targets;
 
         EditorGUI.BeginDisabledGroup(true);
-        foreach (BulletPool script in scripts) {
+        foreach (BulletPool script in targets) {
             EditorGUILayout.FloatField("time", script.t);
             EditorGUILayout.FloatField("spawn time", script.spawnTime);
-            EditorGUILayout.FloatField("death time", script.deathTime);
+            EditorGUILayout.FloatField("death time", script.scheduledDeathTime);
         }
         EditorGUI.EndDisabledGroup();
 

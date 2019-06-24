@@ -4,14 +4,43 @@ using UnityEngine;
 
 public class TimeObject : MonoBehaviour, ITimeObject {
     public Vector3 dir;
-
+    /// <summary>
+    /// Age (Local Time)
+    /// </summary>
     public float t { get { return GameManager.time - spawnTime; } set { } }
+    /// <summary>
+    /// Birth time (Gloabl Time)
+    /// </summary>
     public float spawnTime { get; set; }
-    public float deathTime { get; set; }
-    public Vector3 startpos { get; set; }
+    private float _scheduledDeathTime;
+    private float _actualdDeathTime;
+    /// <summary>
+    /// death timer
+    /// </summary>
+    public float scheduledDeathTime {
+        get { return _scheduledDeathTime; }
+        set { _actualdDeathTime = _scheduledDeathTime = value; } }
+    /// <summary>
+    /// time of death smaller than scheduled if has died from non old age
+    /// </summary>
+    public float actualdDeathTime {
+        get { return _actualdDeathTime; }
+        set { _actualdDeathTime = Mathf.Min(value, _scheduledDeathTime); } }
+    /// <summary>
+    /// Method to describe position(t)
+    /// </summary>
     public IEvaluable evaluable { get; set; }
+    /// <summary>
+    /// shoudl be used, but is not :/
+    /// </summary>
     public TimeState timeState { get; set; }
+    /// <summary>
+    /// The age of your parent at birth (need for time heirarcys greater than 3)
+    /// </summary>
     public float parentAgeAtBirth { get; set; }
+    /// <summary>
+    /// Are you currently dead at this point in perceived time
+    /// </summary>
     public bool dead;
     // Start is called before the first frame update
 
@@ -24,13 +53,25 @@ public class TimeObject : MonoBehaviour, ITimeObject {
         if (t < 0) {
             BeforeBirth();
         }
+        if (dead && t < actualdDeathTime) {
+            dead = false;
+            Resurrect();
+            actualdDeathTime = scheduledDeathTime;
+        }
     }
     private void CheckDeath() {
-        if (t > deathTime && !dead) {
+        if (t > scheduledDeathTime && !dead) {
             AfterNaturalDeath();
-        } else if (t < deathTime && dead) {
+        } else if (t < scheduledDeathTime && dead) {
             Resurrect();
         }
+    }
+    /// <summary>
+    /// Flag this object has been killed prematurly
+    /// </summary>
+    public void Kill(float killedTime) {
+        dead = true;
+        actualdDeathTime = killedTime;
     }
     /// <summary>
     /// Transition from alive to before birth (rewind)
@@ -61,9 +102,10 @@ public class TimeObject : MonoBehaviour, ITimeObject {
         Gizmos.DrawSphere(evaluable.eval(0),0.5f);
 
         Gizmos.color = Color.red;
-        Gizmos.DrawSphere(evaluable.eval(deathTime), 0.5f);
-        Gizmos.color = Color.cyan;
-        for (float x = 0.1f; x < deathTime; x += 0.1f) {
+        Gizmos.DrawSphere(evaluable.eval(scheduledDeathTime), 0.5f);
+        for (float x = 0.1f; x < scheduledDeathTime; x += 0.1f) {
+            float m = x % 1;
+            Gizmos.color = new Color(0,m,m);
             Gizmos.DrawLine(evaluable.eval(x), evaluable.eval(x - 0.1f));
         }
     }

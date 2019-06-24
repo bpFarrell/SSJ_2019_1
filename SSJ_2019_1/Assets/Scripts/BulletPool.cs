@@ -5,6 +5,12 @@ public class BulletPool : TimeObject {
     private static List<BulletPool> activeItem = new List<BulletPool>();
     private static List<BulletPool> pendingItems = new List<BulletPool>();
     private static List<BulletPool> pooledItems = new List<BulletPool>();
+    private static Material _mat;
+    public static Material mat {
+        get {
+            return _mat ?? (_mat = Resources.Load("Unlit_Projectile")as Material);
+        }
+    }
     private static GameObject holder;
     MeshRenderer mr;
     static int spawnCount;
@@ -14,7 +20,7 @@ public class BulletPool : TimeObject {
     void Awake() {
         mr = GetComponent<MeshRenderer>();
         evaluable = new IEvaluable();
-        deathTime = 10;
+        scheduledDeathTime = 10;
     }
     public static BulletPool GetObject() {
         if (pooledItems.Count == 0) {
@@ -33,7 +39,10 @@ public class BulletPool : TimeObject {
             spawnCount++;
             go.transform.parent = holder.transform;
             go.SetActive(false);
+            go.GetComponent<MeshRenderer>().material = mat;
             BulletPool obj = go.AddComponent<BulletPool>();
+
+            go.transform.localScale = Vector3.one * 2;
             pooledItems.Add(obj);
         }
         Debug.Log("Pooling more! pool is at "+(pooledItems.Count+activeItem.Count+pendingItems.Count));
@@ -47,7 +56,7 @@ public class BulletPool : TimeObject {
         activeItem.Remove(this);
         pooledItems.Add(this);
         gameObject.SetActive(false);
-        transform.localScale = Vector3.one;
+        transform.localScale = Vector3.one*2;
         //splitTime = 1000;
     }
     public virtual void MarkPolledToActive() {
@@ -72,6 +81,7 @@ public class BulletPool : TimeObject {
     public void Update() {
         TimeUpdate();
         if (dead) return;
+        SetRotation();
         if (t>splitTime&&!didSplit) {
             didSplit = true;
             for(int x = 0; x < 8; x++) {
@@ -82,11 +92,14 @@ public class BulletPool : TimeObject {
                 obj.parentAgeAtBirth = GameManager.time - spawnTime;
                 obj.Init(evaluable);
                 obj.transform.localScale *= 0.2f;
-                obj.deathTime = 4;
+                obj.scheduledDeathTime = 4;
                 obj.splitTime = 100;
             }
         }
         CheckCounts();
+    }
+    void SetRotation() {
+        transform.rotation = Quaternion.LookRotation(Vector3.forward, dir + curve * Mathf.Pow(t, 2));
     }
     void CheckCounts() {
         int currentCount = pooledItems.Count + activeItem.Count + pendingItems.Count;

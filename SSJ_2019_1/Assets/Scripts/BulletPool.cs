@@ -145,6 +145,7 @@ public class BulletPool : TimeObject {
     private void SpawnDeathAnim() {
         GameObject go = GameObject.CreatePrimitive(PrimitiveType.Quad);
         go.name = "DeathEffect";
+        go.layer = LayerMask.NameToLayer("EnemyBullet");
         go.transform.position = transform.position;
         go.transform.rotation = transform.rotation;
         go.transform.localScale = transform.localScale;

@@ -12,7 +12,7 @@ GameObject:
   - component: {fileID: 288609207}
   - component: {fileID: 288609206}
   - component: {fileID: 288609205}
-  m_Layer: 0
+  m_Layer: 11
   m_Name: Quad (1)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -102,7 +102,7 @@ GameObject:
   m_Component:
   - component: {fileID: 8598606852755264459}
   - component: {fileID: 5111132388372026675}
-  m_Layer: 0
+  m_Layer: 11
   m_Name: PlayerShot
   m_TagString: Untagged
   m_Icon: {fileID: 0}

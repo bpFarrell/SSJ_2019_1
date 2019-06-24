@@ -14,7 +14,7 @@ public class PlayerController : MonoBehaviour, ITimeObject
     float percentThroughFrame { get { return (GameManager.time - currentFrameTime) / poseSaveIntervals; } }
     public float t { get; set; }
     public float spawnTime { get; set; }
-    public float deathTime { get; set; }
+    public float scheduledDeathTime { get; set; }
     public Vector3 startpos { get; set; }
     public IEvaluable evaluable { get; set; }
     public TimeState timeState { get; set; }
@@ -38,6 +38,14 @@ public class PlayerController : MonoBehaviour, ITimeObject
         transform.position += dir*moveSpeed;
         TryRecordPos();
         TryShoot();
+        if (player.GetButtonDown("Confirm")) {
+            GameObject go = Instantiate(Resources.Load("PlayerShot"))as GameObject;
+            PlayerShot ps = go.GetComponent<PlayerShot>();
+            ps.spawnTime = GameManager.time;
+            ps.dir = Vector3.right * 20;
+            ps.scheduledDeathTime = 5;
+            ps.Init(evaluable);
+        }
     }
     void TryRecordPos() {
         float lastSnap = ((float)poses.Count) * poseSaveIntervals;
@@ -83,7 +91,7 @@ public class PlayerController : MonoBehaviour, ITimeObject
             obj.spawnTime = lastSpawn;
             obj.parentAgeAtBirth = lastSpawn;
             obj.splitTime = 9.9f;
-            obj.deathTime = 10;
+            obj.scheduledDeathTime = 10;
             obj.dir = (Vector3.right) * 3;
             obj.Init(evaluable);
             

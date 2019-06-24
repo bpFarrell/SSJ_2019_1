@@ -7,6 +7,7 @@
 		_Col1("col1",Color) = (0,0,0,0)
 		_Col2("col2",Color) = (0,0,0,0)
 		_Blend("blend",Float) = 0
+		_Kill("kill",Float) = 0
     }
     SubShader
     {
@@ -44,6 +45,7 @@
 			fixed4 _Col1;
 			fixed4 _Col2;
 			float _Blend;
+			float _Kill;
             v2f vert (appdata v)
             {
                 v2f o;
@@ -57,8 +59,8 @@
 			fixed4 frag(v2f i) : SV_Target
 			{
 				float2 uv = i.uv * 2 - 1;
-                fixed4 col = tex2D(_MainTex, i.worldPos.xy*0.15+uv*0.5)-0.5;
-				col+= (tex2D(_MainTex, i.worldPos.xy*0.5+uv*0.5) - 0.5)*0.5;
+                fixed4 col = tex2D(_MainTex, i.worldPos.xy*0.15+uv*0.1)-0.5;
+				col+= (tex2D(_MainTex, i.worldPos.xy*0.5+uv*0.1) - 0.5)*0.5;
 				float r = smoothstep(0.3,.6,1 - length(uv + fixed2(0, -0.3)));
 
 				//r += max(smoothstep(0.3, .6, 1 - length(uv+fixed2(0,0.3))),0)*0.3;
@@ -67,9 +69,9 @@
 				fixed4 m = tex2D(_Mask, i.uv);
 				float t = lerp(m.b+m.r,-col,_Blend);
 
-				if (t < .85)
+				if (t < .85+_Kill)
 					discard;
-				float black = smoothstep(1.1, 1.2, t);
+				float black = smoothstep(1.1+_Kill, 1.2+_Kill, t);
 				t -= 0.7;
 
 				//return (1, 1, 1, 1)* t;

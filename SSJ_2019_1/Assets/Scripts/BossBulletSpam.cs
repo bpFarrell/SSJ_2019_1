@@ -14,12 +14,17 @@ public class BossBulletSpam : TimeObject
     {
         startPos = transform.position;
         evaluable = new IEvaluable();
-        evaluable.eval = (t) => { return new Vector3(0,Mathf.Sin(t*freq)*mag,0)+startPos; };
+        scheduledDeathTime = float.MaxValue;
+
+        evaluable.eval = (t) => { return new Vector3(0,
+            Mathf.PerlinNoise(0, t*freq) * mag+ Mathf.PerlinNoise(2, t*freq*0.5f) * mag*2,0)+
+            startPos; };
     }
 
     // Update is called once per frame
     void Update()
     {
+        TimeUpdate();
         if (GameManager.time < lastSpawn) {
             lastSpawn -= spawnRate;
         }
@@ -27,9 +32,23 @@ public class BossBulletSpam : TimeObject
             lastSpawn += spawnRate;
 
             alternate = !alternate;
-            Volley();
-            WaveSpawn();
+            Simple();
+            //Volley();
+            //WaveSpawn();
         }
+    }
+    public void Simple() {
+        BulletPool obj = BulletPool.GetObject();
+        obj.spawnTime = lastSpawn;
+        obj.parentAgeAtBirth = lastSpawn;
+        obj.splitTime = 1000f;
+        obj.scheduledDeathTime = 15;
+        obj.dir = new Vector3(
+            -4,
+            0,
+            0) * 4;
+        obj.curve = Vector3.zero;
+        obj.Init(evaluable);
     }
     public void WaveSpawn() {
         int count = alternate ? 10 : 9;

@@ -3,10 +3,10 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class PlayerController : MonoBehaviour, ITimeObject
-{
+public class PlayerController : MonoBehaviour, ITimeObject {
     public float moveSpeed = 1;
     public float moveTimeScalar = 1f;
+    public float screenPadding = 1;
     List<Vector3> poses = new List<Vector3>();
     float poseSaveIntervals = 0.1f;
     int currentFrame { get { return Mathf.FloorToInt(GameManager.time / poseSaveIntervals); } }
@@ -18,28 +18,28 @@ public class PlayerController : MonoBehaviour, ITimeObject
     public Vector3 startpos { get; set; }
     public IEvaluable evaluable { get; set; }
     public TimeState timeState { get; set; }
-    public float parentAgeAtBirth { get; set ; }
+    public float parentAgeAtBirth { get; set; }
 
     float lastSpawn;
     float spawnRate = 1;
     private void Awake() {
         evaluable = new IEvaluable();
         evaluable.eval = (t) => { return GetPosAtTime(t); };
-    }    
-    void Update()
-    {
+    }
+    void Update() {
 
         Player player = ReInput.players.GetPlayer(0);
         Vector3 dir = new Vector3(player.GetAxis("MoveHori"), player.GetAxis("MoveVert"), 0);
         if (dir.magnitude > Mathf.Epsilon) {
             GameManager.time += dir.magnitude * Time.deltaTime * moveTimeScalar;
             CullBranch();
+            transform.position += dir * moveSpeed;
+            TryBounds();
         }
-        transform.position += dir*moveSpeed;
         TryRecordPos();
         TryShoot();
         if (player.GetButtonDown("Confirm")) {
-            GameObject go = Instantiate(Resources.Load("PlayerShot"))as GameObject;
+            GameObject go = Instantiate(Resources.Load("PlayerShot")) as GameObject;
             PlayerShot ps = go.GetComponent<PlayerShot>();
             ps.spawnTime = GameManager.time;
             ps.dir = Vector3.right * 20;
@@ -52,16 +52,16 @@ public class PlayerController : MonoBehaviour, ITimeObject
         if (lastSnap < GameManager.time) {
             poses.Add(transform.position);
         }
-        if(lastSnap - poseSaveIntervals > GameManager.time) {
+        if (lastSnap - poseSaveIntervals > GameManager.time) {
             transform.position = GetCurrentPos();
         }
         for (int i = 1; i < poses.Count; i++) {
-            Debug.DrawLine(poses[i - 1],poses[i]);
+            Debug.DrawLine(poses[i - 1], poses[i]);
         }
     }
     void CullBranch() {
         if (currentFrame >= poses.Count - 1) return;
-        int length = poses.Count - currentFrame-1;
+        int length = poses.Count - currentFrame - 1;
         Debug.Log("Culling branch " + currentFrame + ", " + length);
         poses.RemoveRange(currentFrame + 1, length);
     }
@@ -70,9 +70,9 @@ public class PlayerController : MonoBehaviour, ITimeObject
         return newPos;
     }
     Vector3 GetPosAtTime(float time) {
-        int currentFrame = Mathf.FloorToInt(time / poseSaveIntervals); 
-        float currentFrameTime = currentFrame * poseSaveIntervals; 
-        float percentThroughFrame =(time - currentFrameTime) / poseSaveIntervals;
+        int currentFrame = Mathf.FloorToInt(time / poseSaveIntervals);
+        float currentFrameTime = currentFrame * poseSaveIntervals;
+        float percentThroughFrame = (time - currentFrameTime) / poseSaveIntervals;
         int nowFrame = Mathf.Min(currentFrame, poses.Count - 1);
         int nextFrame = Mathf.Min(currentFrame + 1, poses.Count - 1);
         return Vector3.Lerp(
@@ -94,7 +94,22 @@ public class PlayerController : MonoBehaviour, ITimeObject
             obj.scheduledDeathTime = 10;
             obj.dir = (Vector3.right) * 3;
             obj.Init(evaluable);
-            
+
         }
+    }
+    void TryBounds() {
+        Vector3 clampedPos = new Vector3();
+        Rect rect = CamPost.screenRect;
+        clampedPos.x = Mathf.Clamp(transform.position.x, 
+            rect.xMin+screenPadding, 
+            rect.xMax-screenPadding-5);
+        clampedPos.y = Mathf.Clamp(transform.position.y, 
+            rect.yMin+screenPadding, 
+            rect.yMax-screenPadding);
+        transform.position = clampedPos;
+    }
+    private void OnTriggerEnter(Collider other) {
+        TimeObject to = other.GetComponent<TimeObject>();
+        to.Kill(GameManager.time);
     }
 }

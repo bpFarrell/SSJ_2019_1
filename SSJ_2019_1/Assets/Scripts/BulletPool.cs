@@ -13,6 +13,8 @@ public class BulletPool : TimeObject {
     }
     private static GameObject holder;
     MeshRenderer mr;
+    Rigidbody rb;
+    SphereCollider sc;
     static int spawnCount;
     public float splitTime = 2;
     public bool didSplit = false;
@@ -21,6 +23,11 @@ public class BulletPool : TimeObject {
         mr = GetComponent<MeshRenderer>();
         evaluable = new IEvaluable();
         scheduledDeathTime = 10;
+        Destroy(GetComponent<MeshCollider>());
+        sc = gameObject.AddComponent<SphereCollider>();
+        sc.radius = 0.2f;
+        sc.center = Vector3.up * 0.1f;
+        sc.isTrigger = true;
     }
     public static BulletPool GetObject() {
         if (pooledItems.Count == 0) {
@@ -64,19 +71,26 @@ public class BulletPool : TimeObject {
         pooledItems.Remove(this);
         activeItem.Add(this);
         gameObject.SetActive(true);
-        mr.enabled = true;
+        SoftEnable(true);
     }
     public virtual void MarkActiveToPending() {
         dead = true;
-        mr.enabled = false;
+        SoftEnable(false);
         activeItem.Remove(this);
         pendingItems.Add(this);
     }
     public virtual void MarkPendingToActive() {
         dead = false;
-        mr.enabled = true;
+        SoftEnable(true);
         pendingItems.Remove(this);
         activeItem.Add(this);
+    }
+    public virtual void MarkPendingToPooled() {
+
+        SoftEnable(true);
+        gameObject.SetActive(false);
+        pendingItems.Remove(this);
+        pooledItems.Add(this);
     }
     public void Update() {
         TimeUpdate();
@@ -108,13 +122,29 @@ public class BulletPool : TimeObject {
         }
     }
     public override void BeforeBirth() {
+        base.BeforeBirth();
         MarkActiveToPooled();
     }
     public override void AfterNaturalDeath() {
+        base.AfterNaturalDeath();
         MarkActiveToPending();
     }
     public override void Resurrect() {
+        base.Resurrect();
         MarkPendingToActive();
-    }
 
+    }
+    public override void Kill(float killedTime) {
+        base.Kill(killedTime);
+        MarkActiveToPending();
+    }
+    public override void TotalCleanup() {
+        MarkPendingToPooled();
+    }
+    private void SoftEnable(bool enable) {
+        mr.enabled = enable;
+        //rb.
+        sc.enabled = enable;
+
+    }
 }

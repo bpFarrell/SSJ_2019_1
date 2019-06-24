@@ -14,6 +14,7 @@ public class BulletPoolEditor : Editor
             EditorGUILayout.FloatField("time", script.t);
             EditorGUILayout.FloatField("spawn time", script.spawnTime);
             EditorGUILayout.FloatField("death time", script.scheduledDeathTime);
+            EditorGUILayout.FloatField("actual death time", script.actualdDeathTime);
         }
         EditorGUI.EndDisabledGroup();
 

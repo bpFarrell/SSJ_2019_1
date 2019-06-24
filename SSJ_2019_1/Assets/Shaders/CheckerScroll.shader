@@ -48,7 +48,7 @@
             {
                 // sample the texture
                 fixed4 col = tex2D(_MainTex, i.uv);
-				fixed2 subUV = fmod(i.uv + fixed2(200-_T, 0)*0.1, 0.1)*10;
+				fixed2 subUV = fmod(i.uv + fixed2(20000-_T, 0)*0.1, 0.1)*10;
                 return subUV.xyyy;
             }
             ENDCG

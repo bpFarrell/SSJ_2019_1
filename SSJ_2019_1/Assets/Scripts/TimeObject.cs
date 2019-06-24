@@ -42,7 +42,6 @@ public class TimeObject : MonoBehaviour, ITimeObject {
     /// Are you currently dead at this point in perceived time
     /// </summary>
     public bool dead;
-    // Start is called before the first frame update
 
     /// <summary>
     /// Call this to update the continuous position.
@@ -53,25 +52,24 @@ public class TimeObject : MonoBehaviour, ITimeObject {
         if (t < 0) {
             BeforeBirth();
         }
-        if (dead && t < actualdDeathTime) {
+    }
+    private void CheckDeath() {
+        if (t > scheduledDeathTime && !dead) {
+            dead = true;
+            AfterNaturalDeath();
+        } else if (t < actualdDeathTime && dead) {
             dead = false;
             Resurrect();
             actualdDeathTime = scheduledDeathTime;
         }
     }
-    private void CheckDeath() {
-        if (t > scheduledDeathTime && !dead) {
-            AfterNaturalDeath();
-        } else if (t < scheduledDeathTime && dead) {
-            Resurrect();
-        }
-    }
     /// <summary>
     /// Flag this object has been killed prematurly
     /// </summary>
-    public void Kill(float killedTime) {
+    public virtual void Kill(float gloablKillTime) {
         dead = true;
-        actualdDeathTime = killedTime;
+        actualdDeathTime = gloablKillTime - spawnTime;
+        GameManager.instance.OnTurnComplete += OnTurnComplete;
     }
     /// <summary>
     /// Transition from alive to before birth (rewind)
@@ -84,18 +82,34 @@ public class TimeObject : MonoBehaviour, ITimeObject {
     /// </summary>
     public virtual void AfterNaturalDeath() {
 
+        GameManager.instance.OnTurnComplete += OnTurnComplete;
+
     }
     /// <summary>
     /// Transition to living from death (rewind)
     /// </summary>
     public virtual void Resurrect() {
-
+        GameManager.instance.OnTurnComplete -= OnTurnComplete;
+        timeState = TimeState.Alive;
     }
     /// <summary>
     /// Transition to living from prebirth
     /// </summary>
     public virtual void Birth() {
 
+    }
+    private void OnTurnComplete() {
+        if (timeState != TimeState.PendingCleanup) {
+            Debug.Log("Setting pending cleanup on " + gameObject.name);
+            timeState = TimeState.PendingCleanup;
+        }else if (timeState == TimeState.PendingCleanup) {
+            Debug.Log("Actually cleaning up " + gameObject.name);
+            GameManager.instance.OnTurnComplete -= OnTurnComplete;
+            TotalCleanup();
+        }
+    }
+    public virtual void TotalCleanup() {
+        Destroy(gameObject);
     }
     public void OnDrawGizmosSelected() {
         Gizmos.color = Color.green;

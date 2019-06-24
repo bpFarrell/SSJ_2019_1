@@ -5,7 +5,8 @@ public enum TimeState {
     Prebirth,
     Alive,
     EarlyDead,
-    Dead
+    Dead,
+    PendingCleanup
 }
 public interface ITimeObject 
 {

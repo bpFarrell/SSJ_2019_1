@@ -57,8 +57,8 @@
 			fixed4 frag(v2f i) : SV_Target
 			{
 				float2 uv = i.uv * 2 - 1;
-                fixed4 col = tex2D(_MainTex, i.worldPos.xy*0.15)-0.5;
-				col+= (tex2D(_MainTex, i.worldPos.xy*0.5) - 0.5)*0.5;
+                fixed4 col = tex2D(_MainTex, i.worldPos.xy*0.15+uv*0.5)-0.5;
+				col+= (tex2D(_MainTex, i.worldPos.xy*0.5+uv*0.5) - 0.5)*0.5;
 				float r = smoothstep(0.3,.6,1 - length(uv + fixed2(0, -0.3)));
 
 				//r += max(smoothstep(0.3, .6, 1 - length(uv+fixed2(0,0.3))),0)*0.3;
@@ -69,13 +69,13 @@
 
 				if (t < .85)
 					discard;
-				float black = smoothstep(1, 1.3, t);
+				float black = smoothstep(1.1, 1.2, t);
 				t -= 0.7;
 
 				//return (1, 1, 1, 1)* t;
 				col = lerp(_Col1,_Col2,t);
 
-				return (col + pow(m.b,8))*black+r*0.3;
+				return (col + pow(m.b,8))*black+r*0.2;
             }
             ENDCG
         }

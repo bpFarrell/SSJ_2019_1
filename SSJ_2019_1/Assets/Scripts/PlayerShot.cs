@@ -5,9 +5,11 @@ using UnityEngine;
 public class PlayerShot : TimeObject
 {
     public MeshRenderer mr;
+    public Collider col;
     public void Init(IEvaluable parent) {
         evaluable = new IEvaluable();
         evaluable.eval = (t) => { return parent.eval(spawnTime) + dir * t; };
+        col = GetComponent<Collider>();
         //mr = GetComponent<MeshRenderer>();
     }   
     void Update()
@@ -20,6 +22,12 @@ public class PlayerShot : TimeObject
     }
     public override void Resurrect() {
         mr.enabled = true;
+        col.enabled = true;
+    }
+    public override void Kill(float gloablKillTime) {
+        base.Kill(gloablKillTime);
+        mr.enabled = false;
+        col.enabled = false;
     }
 
 }

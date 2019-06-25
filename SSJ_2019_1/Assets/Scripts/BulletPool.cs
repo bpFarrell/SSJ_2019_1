@@ -43,6 +43,7 @@ public class BulletPool : TimeObject {
         for (int x = 0; x < count; x++) {
             GameObject go = GameObject.CreatePrimitive(PrimitiveType.Quad);
             go.name = "pooled " + spawnCount;
+            go.layer = LayerMask.NameToLayer("EnemyBullet");
             spawnCount++;
             go.transform.parent = holder.transform;
             go.SetActive(false);

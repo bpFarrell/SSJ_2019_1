@@ -7,7 +7,7 @@ Material:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: Unlit_Projectile
+  m_Name: Unlit_Projectile 1
   m_Shader: {fileID: 4800000, guid: f5921d278ad12bb47bb462b8da4a2f5a, type: 3}
   m_ShaderKeywords: 
   m_LightmapFlags: 4
@@ -28,8 +28,9 @@ Material:
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     m_Floats:
-    - _Blend: -0.63
+    - _Blend: -2.25
     - _Kill: 0
+    - _Smooth: 0.44
     m_Colors:
-    - _Col1: {r: 0, g: 1, b: 0.58882093, a: 1}
-    - _Col2: {r: 0.5919976, g: 0, b: 1, a: 1}
+    - _Col1: {r: 0, g: 0.14525366, b: 1, a: 1}
+    - _Col2: {r: 1, g: 0.38162112, b: 0, a: 1}

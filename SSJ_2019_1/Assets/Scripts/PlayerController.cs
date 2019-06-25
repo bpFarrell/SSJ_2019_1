@@ -104,7 +104,7 @@ public class PlayerController : MonoBehaviour, ITimeObject {
         Rect rect = CamPost.screenRect;
         clampedPos.x = Mathf.Clamp(transform.position.x, 
             rect.xMin+screenPadding, 
-            rect.xMax-screenPadding-5);
+            rect.xMax-rect.width/4);
         clampedPos.y = Mathf.Clamp(transform.position.y, 
             rect.yMin+screenPadding, 
             rect.yMax-screenPadding);

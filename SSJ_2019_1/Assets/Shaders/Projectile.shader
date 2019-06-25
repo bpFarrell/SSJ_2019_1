@@ -8,6 +8,7 @@
 		_Col2("col2",Color) = (0,0,0,0)
 		_Blend("blend",Float) = 0
 		_Kill("kill",Float) = 0
+		_Smooth("smooth",Float) = 1
     }
     SubShader
     {
@@ -46,6 +47,7 @@
 			fixed4 _Col2;
 			float _Blend;
 			float _Kill;
+			float _Smooth;
             v2f vert (appdata v)
             {
                 v2f o;
@@ -67,7 +69,7 @@
 				//r = saturate(r);
 				//return (1, 1, 1, 1)* r;
 				fixed4 m = tex2D(_Mask, i.uv);
-				float t = lerp(m.b+m.r,-col,_Blend);
+				float t = lerp(m.b+m.r,-col*_Smooth,_Blend);
 
 				if (t < .85+_Kill)
 					discard;

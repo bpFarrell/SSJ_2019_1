@@ -4,12 +4,12 @@ using UnityEngine;
 
 public class ProjectileDeathAnim : TimeObject {
     public float kill = 0;
-    public float startScale = 1;
+    public float startScale = 2;
     public Vector3 startPoint;
     Material mat;
     private void Awake() {
-        mat = GetComponent<MeshRenderer>().material;
-        startScale = transform.localScale.x;
+        mat = GetComponentInChildren<MeshRenderer>().material;
+        //startScale = transform.localScale.x;
         startPoint = transform.position;
     }
 
@@ -20,9 +20,9 @@ public class ProjectileDeathAnim : TimeObject {
         scheduledDeathTime = 1;
     }
     private void Update() {
-        float tScaled = Mathf.Clamp(t * 5,0,2);
+        float tScaled = Mathf.Clamp(t * 5,0,5);
         mat.SetFloat("_Kill", tScaled);
-        transform.localScale = Vector3.one * (tScaled * 2 + 1 ) * startScale;
+        transform.localScale = Vector3.one * (tScaled + 1 ) * startScale;
         TimeUpdate();
     }
     public override void BeforeBirth() {

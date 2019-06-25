@@ -18,6 +18,15 @@ public class GameManager : MonoBehaviour {
     public float _time;
     public float turnLength = 5;
     public int turnNumber = 0;
+    public float turnStartTime {
+        get { return ((float)turnLength) * turnNumber; }
+    }
+    public float timeIntoTurn {
+        get { return time - turnStartTime; }
+    }
+    public float percentThroughTurn {
+        get { return timeIntoTurn / turnLength; }
+    }
     public static GameManager instance;
     public GameState state = GameState.TITLE;
     public StateChange OnStateChange;
@@ -30,6 +39,7 @@ public class GameManager : MonoBehaviour {
         if (newState == instance.state) return;
         GameState old = instance.state;
         instance.state = newState;
+        Debug.Log("GameManger: changing state from: " + old + ", to " + newState);
         if (instance.OnStateChange != null) {
             instance.OnStateChange(old, newState);
         }

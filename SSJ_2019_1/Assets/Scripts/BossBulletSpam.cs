@@ -6,6 +6,7 @@ public class BossBulletSpam : TimeObject
 {
     float lastSpawn;
     float spawnRate = 2;
+    public int hp = 20;
     public Vector3 startPos;
     public float mag=1;
     public float freq=1;
@@ -82,6 +83,16 @@ public class BossBulletSpam : TimeObject
                 0) * 4;
             obj.curve = new Vector3(0, -1+(((float)x)/10), 0)* (alternate ? 1 : -1);
             obj.Init(evaluable);
+        }
+    }
+    private void OnTriggerEnter(Collider other) {
+        //if (other.gameObject.layer == LayerMask.NameToLayer("EnemyBullet")) return;
+        TimeObject to = other.GetComponent<TimeObject>();
+        to.Kill(GameManager.time);
+        hp--;
+        if (hp <= 0) {
+            Debug.Log("Killed the boss!");
+            GameManager.ChangeState(GameState.END);
         }
     }
 }

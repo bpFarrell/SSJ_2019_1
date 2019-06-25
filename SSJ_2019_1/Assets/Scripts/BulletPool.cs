@@ -78,6 +78,7 @@ public class BulletPool : TimeObject {
         SoftEnable(false);
         activeItem.Remove(this);
         pendingItems.Add(this);
+        SpawnDeathAnim();
     }
     public virtual void MarkPendingToActive() {
         dead = false;
@@ -140,6 +141,19 @@ public class BulletPool : TimeObject {
     }
     public override void TotalCleanup() {
         MarkPendingToPooled();
+    }
+    private void SpawnDeathAnim() {
+        GameObject go = GameObject.CreatePrimitive(PrimitiveType.Quad);
+        go.name = "DeathEffect";
+        go.layer = LayerMask.NameToLayer("EnemyBullet");
+        go.transform.position = transform.position;
+        go.transform.rotation = transform.rotation;
+        go.transform.localScale = transform.localScale;
+        go.GetComponent<MeshRenderer>().material = new Material(mr.material);
+        ProjectileDeathAnim pda = go.AddComponent<ProjectileDeathAnim>();
+        pda.parentAgeAtBirth = GameManager.time - spawnTime;
+        pda.spawnTime = GameManager.time;
+        pda.Init(evaluable);
     }
     private void SoftEnable(bool enable) {
         mr.enabled = enable;

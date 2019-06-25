@@ -39,12 +39,14 @@ public class PlayerController : MonoBehaviour, ITimeObject {
         TryRecordPos();
         TryShoot();
         if (player.GetButtonDown("Confirm")) {
-            GameObject go = Instantiate(Resources.Load("PlayerShot")) as GameObject;
-            PlayerShot ps = go.GetComponent<PlayerShot>();
-            ps.spawnTime = GameManager.time;
-            ps.dir = Vector3.right * 20;
-            ps.scheduledDeathTime = 5;
-            ps.Init(evaluable);
+            for (int x = 0; x < 3; x++) {
+                GameObject go = Instantiate(Resources.Load("PlayerShot")) as GameObject;
+                PlayerShot ps = go.GetComponent<PlayerShot>();
+                ps.spawnTime = GameManager.time-((float)x)/10;
+                ps.dir = Vector3.right * 20;
+                ps.scheduledDeathTime = 5;
+                ps.Init(evaluable);
+            }
         }
     }
     void TryRecordPos() {

@@ -14,10 +14,6 @@ public class PlayerShot : TimeObject
     {
         TimeUpdate();
         if (dead) return;
-        if (transform.position.x > 20) {
-            Kill(t);
-            mr.enabled = false;
-        }
     }
     public override void BeforeBirth() {
         Destroy(gameObject);

@@ -32,9 +32,9 @@ public class BossBulletSpam : TimeObject
             lastSpawn += spawnRate;
 
             alternate = !alternate;
-            Simple();
-            //Volley();
-            //WaveSpawn();
+            //Simple();
+            Volley();
+            WaveSpawn();
         }
     }
     public void Simple() {

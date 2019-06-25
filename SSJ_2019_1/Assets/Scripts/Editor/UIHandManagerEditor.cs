@@ -16,5 +16,14 @@ public class UIHandManagerEditor : Editor {
             script.ReceiveCard(def);
         }
         EditorGUI.EndDisabledGroup();
+        EditorGUILayout.Space();
+        if (GUILayout.Button("Update"))
+        {
+            script.Reorder();
+        }
+        if (GUILayout.Button("Toggle Hide"))
+        {
+            script.hidden = !script.hidden;
+        }
     }
 }

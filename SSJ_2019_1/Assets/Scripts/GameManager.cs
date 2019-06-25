@@ -11,7 +11,7 @@ public enum GameState
     END,
 }
 public delegate void StateChange(GameState old, GameState now);
-public delegate void CardUse(/*CardPrefab*/);
+public delegate void CardUse(CardDefinition card);
 public delegate void TurnComplete();
 public class GameManager : MonoBehaviour {
     public static float time = 0;

@@ -117,7 +117,7 @@ public class TimeObject : MonoBehaviour, ITimeObject {
 
         Gizmos.color = Color.red;
         Gizmos.DrawSphere(evaluable.eval(scheduledDeathTime), 0.5f);
-        for (float x = 0.1f; x < scheduledDeathTime; x += 0.1f) {
+        for (float x = 0.1f; x < Mathf.Min(scheduledDeathTime,100); x += 0.1f) {
             float m = x % 1;
             Gizmos.color = new Color(0,m,m);
             Gizmos.DrawLine(evaluable.eval(x), evaluable.eval(x - 0.1f));

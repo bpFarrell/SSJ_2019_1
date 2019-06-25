@@ -8,7 +8,13 @@ public class BulletPool : TimeObject {
     private static Material _mat;
     public static Material mat {
         get {
-            return _mat ?? (_mat = Resources.Load("Unlit_Projectile")as Material);
+            return _mat ?? (_mat = Resources.Load("Unlit_Projectile") as Material);
+        }
+    }
+    private static Material _mat1;
+    public static Material mat1 {
+        get {
+            return _mat1 ?? (_mat1 = Resources.Load("Unlit_Projectile 1") as Material);
         }
     }
     private static GameObject holder;
@@ -20,11 +26,10 @@ public class BulletPool : TimeObject {
     public bool didSplit = false;
     public Vector3 curve;
     void Awake() {
-        mr = GetComponent<MeshRenderer>();
+        mr = GetComponentInChildren<MeshRenderer>();
         evaluable = new IEvaluable();
         scheduledDeathTime = 10;
-        Destroy(GetComponent<MeshCollider>());
-        sc = gameObject.AddComponent<SphereCollider>();
+        sc = gameObject.GetComponent<SphereCollider>();
         sc.radius = 0.2f;
         sc.center = Vector3.up * 0.1f;
         sc.isTrigger = true;
@@ -35,20 +40,33 @@ public class BulletPool : TimeObject {
         }
         BulletPool obj = pooledItems[0];
         obj.MarkPolledToActive();
+        obj.SetMat(0);
         return obj;
+    }
+    public void SetMat(int type) {
+        switch (type) {
+            case (0):
+                mr.material = mat;
+                break;
+            case (1):
+                mr.material = mat1;
+                break;
+            default:
+                break;
+        }
     }
     public static void PopulatePool(int count) {
         if (holder == null)
             holder = new GameObject("poolHolder");
         for (int x = 0; x < count; x++) {
-            GameObject go = GameObject.CreatePrimitive(PrimitiveType.Quad);
+            GameObject go = Instantiate(Resources.Load("EnemyShot"))as GameObject;
             go.name = "pooled " + spawnCount;
             go.layer = LayerMask.NameToLayer("EnemyBullet");
             spawnCount++;
             go.transform.parent = holder.transform;
             go.SetActive(false);
-            go.GetComponent<MeshRenderer>().material = mat;
-            BulletPool obj = go.AddComponent<BulletPool>();
+            go.GetComponentInChildren<MeshRenderer>().material = mat;
+            BulletPool obj = go.GetComponent<BulletPool>();
 
             go.transform.localScale = Vector3.one * 2;
             pooledItems.Add(obj);
@@ -144,13 +162,13 @@ public class BulletPool : TimeObject {
         MarkPendingToPooled();
     }
     private void SpawnDeathAnim() {
-        GameObject go = GameObject.CreatePrimitive(PrimitiveType.Quad);
+        GameObject go = Instantiate(Resources.Load("EnemyShotDeath")) as GameObject;
         go.name = "DeathEffect";
         go.layer = LayerMask.NameToLayer("EnemyBullet");
         go.transform.position = transform.position;
         go.transform.rotation = transform.rotation;
-        go.transform.localScale = transform.localScale;
-        go.GetComponent<MeshRenderer>().material = new Material(mr.material);
+        go.transform.localScale = transform.localScale*2;
+        go.GetComponentInChildren<MeshRenderer>().material = new Material(mr.material);
         ProjectileDeathAnim pda = go.AddComponent<ProjectileDeathAnim>();
         pda.parentAgeAtBirth = GameManager.time - spawnTime;
         pda.spawnTime = GameManager.time;
@@ -158,7 +176,6 @@ public class BulletPool : TimeObject {
     }
     private void SoftEnable(bool enable) {
         mr.enabled = enable;
-        //rb.
         sc.enabled = enable;
 
     }

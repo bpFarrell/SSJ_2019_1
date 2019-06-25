@@ -11,12 +11,19 @@ public class BossBulletSpam : TimeObject
     public float mag=1;
     public float freq=1;
     bool alternate;
+    MeshRenderer mr;
+    private void OnEnable() {
+        GameManager.instance.OnNewTurn += OnNewTurn;
+    }
+    private void OnDisable() {
+        GameManager.instance.OnNewTurn -= OnNewTurn;
+    }
     void Start()
     {
         startPos = transform.position;
         evaluable = new IEvaluable();
         scheduledDeathTime = float.MaxValue;
-
+        mr = GetComponent<MeshRenderer>();
         evaluable.eval = (t) => { return new Vector3(0,
             Mathf.PerlinNoise(0, t*freq) * mag+ Mathf.PerlinNoise(2, t*freq*0.5f) * mag*2,0)+
             startPos; };
@@ -25,7 +32,9 @@ public class BossBulletSpam : TimeObject
     // Update is called once per frame
     void Update()
     {
+
         TimeUpdate();
+        if (dead) return;
         if (GameManager.time < lastSpawn) {
             lastSpawn -= spawnRate;
         }
@@ -82,8 +91,12 @@ public class BossBulletSpam : TimeObject
                 (alternate ? 2 : -2),
                 0) * 4;
             obj.curve = new Vector3(0, -1+(((float)x)/10), 0)* (alternate ? 1 : -1);
+            obj.SetMat(1);
             obj.Init(evaluable);
         }
+    }
+    public override void Resurrect() {
+        mr.enabled = true;
     }
     private void OnTriggerEnter(Collider other) {
         //if (other.gameObject.layer == LayerMask.NameToLayer("EnemyBullet")) return;
@@ -93,6 +106,40 @@ public class BossBulletSpam : TimeObject
         if (hp <= 0) {
             Debug.Log("Killed the boss!");
             GameManager.ChangeState(GameState.END);
+            Kill(GameManager.time);
+            mr.enabled = false;
         }
+    }
+    void OnNewTurn() {
+        SpawnDangerZone(Random.Range(0, 5));
+    }
+    public void SpawnDangerZone(int type) {
+        GameObject go = Instantiate(Resources.Load("DangerZone"))as GameObject;
+        go.name = "DangeZone " + type;
+        switch (type) {
+            case (0): //Bottom
+                go.transform.position = new Vector3(CamPost.screenRect.center.x, CamPost.screenRect.center.y - CamPost.frustumHeight / 4, 0);
+                go.transform.localScale = new Vector3(CamPost.screenRect.size.x, CamPost.screenRect.size.y / 2, 0);
+                break;
+            case (1): //Top
+                go.transform.position = new Vector3(CamPost.screenRect.center.x, CamPost.screenRect.center.y + CamPost.frustumHeight / 4, 0);
+                go.transform.localScale = new Vector3(CamPost.screenRect.size.x, CamPost.screenRect.size.y / 2, 0);
+                break;
+            case (2):
+                go.transform.position = new Vector3(CamPost.screenRect.center.x- CamPost.screenRect.size.x/8*1, CamPost.screenRect.center.y, 0);
+                go.transform.localScale = new Vector3(CamPost.screenRect.size.x/4, CamPost.screenRect.size.y, 0);
+                break;
+            case (3):
+                go.transform.position = new Vector3(CamPost.screenRect.center.x - CamPost.screenRect.size.x / 8 * 3, CamPost.screenRect.center.y, 0);
+                go.transform.localScale = new Vector3(CamPost.screenRect.size.x / 4, CamPost.screenRect.size.y, 0);
+                break;
+            case (4):
+                go.transform.position = new Vector3(CamPost.screenRect.center.x + CamPost.screenRect.size.x / 8 * 1, CamPost.screenRect.center.y, 0);
+                go.transform.localScale = new Vector3(CamPost.screenRect.size.x / 4, CamPost.screenRect.size.y, 0);
+                break;
+            default:
+                break;
+        }
+
     }
 }

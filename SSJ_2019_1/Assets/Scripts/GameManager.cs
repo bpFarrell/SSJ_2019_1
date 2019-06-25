@@ -32,6 +32,7 @@ public class GameManager : MonoBehaviour {
     public StateChange OnStateChange;
     public CardUse OnCardInvoke;
     public TurnComplete OnTurnComplete;
+    public TurnComplete OnNewTurn;
     void Awake() {
         instance = this;
     }
@@ -58,6 +59,8 @@ public class GameManager : MonoBehaviour {
             Debug.Log("started turn " + turnNumber);
             if (OnTurnComplete != null)
                 OnTurnComplete();
+            if (OnNewTurn != null)
+                OnNewTurn();
         }
         //time = Mathf.Clamp(time,12, 22);
     }

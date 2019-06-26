@@ -676,8 +676,10 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _time: 0
   turnLength: 5
-  turnNumber: 0
+  turnNumber: 1
   state: 0
+  rewindSpeed: 4
+  playTurn: 0
 --- !u!4 &2090743312
 Transform:
   m_ObjectHideFlags: 0

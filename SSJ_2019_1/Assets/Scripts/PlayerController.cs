@@ -28,9 +28,13 @@ public class PlayerController : MonoBehaviour, ITimeObject {
     }
     void Update() {
 
+        if (GameManager.instance.state != GameState.CARD_SELECT) {
+            transform.position = GetCurrentPos();
+            return;
+        }
         Player player = ReInput.players.GetPlayer(0);
         Vector3 dir = new Vector3(player.GetAxis("MoveHori"), player.GetAxis("MoveVert"), 0);
-        if (dir.magnitude > Mathf.Epsilon) {
+        if (dir.magnitude > Mathf.Epsilon&&!GameManager.instance.isAtEndOfTurn) {
             GameManager.time += dir.magnitude * Time.deltaTime * moveTimeScalar;
             CullBranch();
             transform.position += dir * moveSpeed;
@@ -111,7 +115,12 @@ public class PlayerController : MonoBehaviour, ITimeObject {
         transform.position = clampedPos;
     }
     private void OnTriggerEnter(Collider other) {
+        StartDeath();
         TimeObject to = other.GetComponent<TimeObject>();
-        to.Kill(GameManager.time);
+        if(to!=null)
+            to.Kill(GameManager.time);
+    }
+    private void StartDeath() {
+        Debug.Log("You are dying!");
     }
 }

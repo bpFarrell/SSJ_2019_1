@@ -74,6 +74,7 @@ public class BossBulletSpam : TimeObject
                 -Mathf.Sin(angle * 3.141529f),
                 -Mathf.Cos(angle * 3.141529f),
                 0) * 2;
+            obj.curve = Vector3.zero;
             obj.Init(evaluable);
         }
     }
@@ -111,7 +112,8 @@ public class BossBulletSpam : TimeObject
         }
     }
     void OnNewTurn() {
-        SpawnDangerZone(Random.Range(0, 5));
+        if(GameManager.instance.turnNumber%3>0)
+            SpawnDangerZone(Rand.GetRange(0,5));
     }
     public void SpawnDangerZone(int type) {
         GameObject go = Instantiate(Resources.Load("DangerZone"))as GameObject;

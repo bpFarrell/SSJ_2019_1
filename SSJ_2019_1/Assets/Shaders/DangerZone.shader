@@ -3,6 +3,7 @@
     Properties
     {
         _MainTex ("Texture", 2D) = "white" {}
+		_Alpha("alpha",Float)=0.25
     }
     SubShader
     {
@@ -36,7 +37,7 @@ Blend SrcAlpha OneMinusSrcAlpha
 
             sampler2D _MainTex;
             float4 _MainTex_ST;
-
+			float _Alpha;
             v2f vert (appdata v)
             {
                 v2f o;
@@ -49,7 +50,7 @@ Blend SrcAlpha OneMinusSrcAlpha
             fixed4 frag (v2f i) : SV_Target
             {
 
-                return fixed4(1,i.uv.y,0,0.25);
+                return fixed4(1,i.uv.y,0,_Alpha);
             }
             ENDCG
         }

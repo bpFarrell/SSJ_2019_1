@@ -13,7 +13,7 @@ GameObject:
   - component: {fileID: 1486053981095123401}
   - component: {fileID: 1486053981095123400}
   - component: {fileID: 291680027326830386}
-  m_Layer: 0
+  m_Layer: 10
   m_Name: DangerZone
   m_TagString: Untagged
   m_Icon: {fileID: 0}

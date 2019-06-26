@@ -28,8 +28,7 @@ public class JSONImporterWindow : EditorWindow
             cardList.Clear();
         }
         GUILayout.Space(20f);
-        if (GUILayout.Button("Process"))
-        {
+        if (GUILayout.Button("Process")) {
             DirectoryCheck();
             Texture2D tex = new Texture2D(256, 256);
             Color[] color = tex.GetPixels();

@@ -1,19 +1,19 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 
-public class PlayerShot : TimeObject
-{
+public class CardTimeObject : TimeObject {
+    public CardEffect effect;
+
     public MeshRenderer mr;
     public Collider col;
-    public void Init(IEvaluable parent) {
+    public void Init(IEvaluable parent, CardEffect details) {
+        Load(details);
         evaluable = new IEvaluable();
         evaluable.eval = (t) => { return parent.eval(spawnTime) + dir * t; };
-        col = GetComponent<Collider>();
-        //mr = GetComponent<MeshRenderer>();
-    }   
-    void Update()
-    {
+    }
+    protected void Load(CardEffect details) {
+        effect = details;
+    }
+    void Update() {
         TimeUpdate();
         if (dead) return;
     }
@@ -29,5 +29,4 @@ public class PlayerShot : TimeObject
         mr.enabled = false;
         col.enabled = false;
     }
-
 }

@@ -13,8 +13,8 @@ public class CardDefinition : ScriptableObject {
     private string _name;
     public new string name { get{ return _name; } private set{_name = value; } }
     [SerializeField]
-    private string _cost;
-    public string cost { get{return _cost;} private set{_cost = value; } }
+    private int _cost;
+    public int cost { get{return _cost;} private set{_cost = value; } }
     [SerializeField]
     private TYPE _type;
     public TYPE type { get{return _type;} private set{_type = value; } }
@@ -34,11 +34,29 @@ public class CardDefinition : ScriptableObject {
                 _sprite = Resources.Load<Sprite>(assetName + ".png");
             return _sprite;
         }
+        private set { _sprite = value; }
     }
+    private static CardTimeObject _projectilePrefabDefault;
+    public static CardTimeObject projectilePrefabDefault {
+        get {
+            return _projectilePrefabDefault ? _projectilePrefabDefault = Resources.Load<CardTimeObject>("CardProjectileBase.asset") : _projectilePrefabDefault; 
+        }
+    }
+    private CardTimeObject _projectilePrefab;
+    public CardTimeObject projectilePrefab {
+        get {
+            if (_projectilePrefab == null)
+                _projectilePrefab = Resources.Load<CardTimeObject>(assetName + ".asset");
+            return _projectilePrefab ? projectilePrefabDefault : _projectilePrefab;
+        }
+        private set { _projectilePrefab = value; }
+    }
+
+    public JSONNode json;
 
     public void FromJSON(JSONNode json) {
         name = json["name"];
-        cost = json["cost"];
+        cost = json["cost"].AsInt;
         string type = json["type"];
         switch (type)
         {
@@ -55,5 +73,21 @@ public class CardDefinition : ScriptableObject {
         description = json["description"];
         flavor = json["flavor"];
         assetName = json["resourceName"];
+        this.json = json;
+    }
+
+    public CardDefinition Copy {
+        get {
+            CardDefinition final = new CardDefinition();
+            final.name = name;
+            final.cost = cost;
+            final.type = type;
+            final.description = description;
+            final.flavor = flavor;
+            final.assetName = assetName;
+            final.sprite = sprite;
+            final.projectilePrefab = projectilePrefab;
+            return final;
+        }
     }
 }

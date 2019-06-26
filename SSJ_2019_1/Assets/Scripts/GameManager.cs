@@ -46,7 +46,7 @@ public delegate void TurnComplete();
 public class GameManager : MonoBehaviour {
     public static float time = 0;
     public float _time;
-    public float turnLength = 5;
+    public float turnLength = 5f;
     public int turnNumber = 0;
     bool isRewindingForSimulation;
     public float turnStartTime {
@@ -65,6 +65,7 @@ public class GameManager : MonoBehaviour {
     public GameState state = GameState.TITLE;
     public StateChange OnStateChange;
     public CardUse OnCardInvoke;
+    public PlayerController player;
     public TurnComplete OnTurnComplete;
     public TurnComplete OnNewTurn;
     public float playerSpeed = 2;

@@ -1,14 +1,13 @@
-﻿using Rewired;
-using System.Collections;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using UnityEngine;
+using Rewired;
 
 public class PlayerController : MonoBehaviour, ITimeObject {
     public float moveSpeed = 1;
     public float moveTimeScalar = 1f;
     public float screenPadding = 1;
-    List<Vector3> poses = new List<Vector3>();
-    float poseSaveIntervals = 0.1f;
+    public List<Vector3> poses = new List<Vector3>();
+    public float poseSaveIntervals = 0.1f;
     int currentFrame { get { return Mathf.FloorToInt(GameManager.time / poseSaveIntervals); } }
     float currentFrameTime { get { return currentFrame * poseSaveIntervals; } }
     float percentThroughFrame { get { return (GameManager.time - currentFrameTime) / poseSaveIntervals; } }
@@ -44,8 +43,8 @@ public class PlayerController : MonoBehaviour, ITimeObject {
         TryShoot();
         if (player.GetButtonDown("Confirm")) {
             for (int x = 0; x < 3; x++) {
-                GameObject go = Instantiate(Resources.Load("PlayerShot")) as GameObject;
-                PlayerShot ps = go.GetComponent<PlayerShot>();
+                PlayerShot ps = Instantiate(Resources.Load<PlayerShot>("PlayerShot"));
+                
                 ps.spawnTime = GameManager.time-((float)x)/10;
                 ps.dir = Vector3.right * 20;
                 ps.scheduledDeathTime = 5;

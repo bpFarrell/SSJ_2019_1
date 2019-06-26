@@ -86,7 +86,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 8598606852755264459}
-  - component: {fileID: 5111132388372026675}
+  - component: {fileID: 958807844334361016}
   - component: {fileID: 2808474043038343261}
   m_Layer: 11
   m_Name: PlayerShot
@@ -110,7 +110,7 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &5111132388372026675
+--- !u!114 &958807844334361016
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -125,7 +125,7 @@ MonoBehaviour:
   dir: {x: 0, y: 0, z: 0}
   dead: 0
   mr: {fileID: 288609206}
-  col: {fileID: 0}
+  col: {fileID: 2808474043038343261}
 --- !u!65 &2808474043038343261
 BoxCollider:
   m_ObjectHideFlags: 0

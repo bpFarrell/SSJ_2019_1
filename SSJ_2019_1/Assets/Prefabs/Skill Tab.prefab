@@ -85,8 +85,9 @@ GameObject:
   - component: {fileID: 2021329510366468993}
   - component: {fileID: 2021329510366468999}
   - component: {fileID: 2021329510366468998}
+  - component: {fileID: -1765736727470403336}
   m_Layer: 5
-  m_Name: Skill
+  m_Name: Skill Tab
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -149,3 +150,17 @@ MonoBehaviour:
   m_FillClockwise: 1
   m_FillOrigin: 0
   m_UseSpriteMesh: 0
+--- !u!114 &-1765736727470403336
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2021329510366468992}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e7745763d45462448897a9c4e58628dc, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  tabColor: {fileID: 2021329510366468998}
+  handleColor: {fileID: 2021329508794742487}

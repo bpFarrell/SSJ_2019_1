@@ -112,6 +112,7 @@ public class TimeObject : MonoBehaviour, ITimeObject {
         Destroy(gameObject);
     }
     public void OnDrawGizmosSelected() {
+        if (evaluable == null) return;
         Gizmos.color = Color.green;
         Gizmos.DrawSphere(evaluable.eval(0),0.5f);
 

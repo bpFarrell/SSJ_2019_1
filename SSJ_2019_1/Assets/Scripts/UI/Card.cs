@@ -3,7 +3,7 @@ using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
 
-public class Card : UIMonoBehaviour, ISelectHandler, IDeselectHandler, ICancelHandler {
+public class Card : UIMonoBehaviour, ISelectHandler, IDeselectHandler, ICancelHandler, ISubmitHandler {
     private CardDefinition definition;
     public Selectable selectable;
     public readonly Color PowerColor = new Color();
@@ -38,8 +38,8 @@ public class Card : UIMonoBehaviour, ISelectHandler, IDeselectHandler, ICancelHa
     private void Awake() { }
 
     public void OnSelect(BaseEventData eventData) {
-        UIHandManager.instance.hidden = false;
-        UIHandManager.instance.selectionIndex = handIndex;
+        UIManager.handManager.hidden = false;
+        UIManager.handManager.selectionIndex = handIndex;
     }
 
     public void OnDeselect(BaseEventData eventData) {
@@ -47,6 +47,10 @@ public class Card : UIMonoBehaviour, ISelectHandler, IDeselectHandler, ICancelHa
     }
     public void OnCancel(BaseEventData eventData) {
         EventSystem.current.SetSelectedGameObject(UICenter.instance.gameObject, eventData);
+    }
+    public void OnSubmit(BaseEventData eventData) {
+        Debug.Log("Selected Card: " + definition.name);
+        UIHandManager.CardTriggered(definition);
     }
 
     public void Load(CardDefinition def) {
@@ -76,7 +80,7 @@ public class Card : UIMonoBehaviour, ISelectHandler, IDeselectHandler, ICancelHa
     private void apply() {
         if (definition == null) return;
         titleText.text = definition.name;
-        costText.text = definition.cost;
+        costText.text = definition.cost.ToString();
         descText.text = definition.description;
 
         switch (definition.type) {

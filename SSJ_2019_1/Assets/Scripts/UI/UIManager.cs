@@ -1,13 +1,22 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 
 public class UIManager : UISingletonBehaviour<UIManager>
 {
     [SerializeField]
-    private UIMovementBar movementBar;
+    private UIMovementBar movementRef;
     [SerializeField]
-    private UISkillBar skillBar;
+    private UISkillBar skillRef;
+    [SerializeField]
+    private UIHandManager handRef;
+
+    public static UIMovementBar movementManager { get { return instance.movementRef; } }
+    public static UISkillBar skillManager { get { return instance.skillRef; } }
+    public static UIHandManager handManager { get { return instance.handRef; } }
+    public static CardEffectTurnManager _CETurnManager;
+    public static CardEffectTurnManager CETurnManager { get {
+            return (_CETurnManager == null) ? _CETurnManager = new CardEffectTurnManager() : _CETurnManager;
+        }
+    }
 
     [Space(10f)]
     public ColorDefine powerPallet;
@@ -19,20 +28,26 @@ public class UIManager : UISingletonBehaviour<UIManager>
     }
 
     private void Awake() {
-        if (movementBar == null) Debug.LogError("UIManager is missing a UIMovementBar reference");
-        if (skillBar == null) Debug.LogError("UIManager is missing a UISkillBar reference");
+        if (movementRef == null) Debug.LogError("UIManager is missing a UIMovementBar reference");
+        if (skillRef == null) Debug.LogError("UIManager is missing a UISkillBar reference");
 
-        movementBar.Init();
-        skillBar.Init();
+        CETurnManager.Init();
+        movementRef.Init();
+        skillRef.Init();
+        handRef.Init();
     }
 
     private void OnDisable() {
-        movementBar.Cleanup();
-        skillBar.Cleanup();
+        CETurnManager.Cleanup();
+        movementRef.Cleanup();
+        skillRef.Cleanup();
+        handRef.Cleanup();
     }
 
     private void Update() {
-        movementBar.process();
-        skillBar.process();
+        CETurnManager.Process();
+        movementRef.Process();
+        skillRef.Process();
+        handRef.Process();
     }
 }

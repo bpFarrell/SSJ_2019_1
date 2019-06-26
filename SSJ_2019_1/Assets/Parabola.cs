@@ -1,6 +1,6 @@
 ﻿using UnityEngine;
 
-public abstract class Parabola<T> : UISingletonBehaviour<T> where T : Parabola<T> {
+public abstract class Parabola : UIMonoBehaviour{
     public float focusDistance = 100f;
     [Space(10f)]
     public int width = 1500;

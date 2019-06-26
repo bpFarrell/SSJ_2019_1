@@ -3,7 +3,7 @@
     Properties
     {
         _MainTex ("Texture", 2D) = "white" {}
-		_Meta("x:percent y:t z:widthRatio", Vector) = (0,0,0,0)
+		_Meta("x:percent y:t z:widthRatio w:rewindT", Vector) = (0,0,0,0)
 		_BGColor("BGColor",Color) = (0,0,0,0)
 		_JasonColor("JasonColor",Color) = (0,0,0,0)
 		_Color1("Color1",Color) = (1,1,1,0)
@@ -59,12 +59,15 @@
 				//uv.x += abs(uv.y);
 				float scaled = uv.x * _Meta.z * 0.5;
 				float sub = scaled + abs(uv.y);
-				sub = fmod(sub +500-_Meta.x, 1);
-				float floor = uv.x;
+				sub = fmod(sub +500-_Meta.x, 1); 
+
 				float prog = smoothstep(_Meta.y - 0.01, _Meta.y + 0.01, i.uv.x);
-				float bar = smoothstep(0.01,0.02,abs(i.uv.x - _Meta.y));
+				float bar = smoothstep(0.003, 0.0045,abs(i.uv.x - _Meta.y));
+				float curProg = smoothstep(_Meta.w - 0.0025, _Meta.w + 0.0025, i.uv.x);
 				//return fixed4(1, 1, 1, 1)* bar;
 				fixed4 clr = lerp(_Color1, _Color2, sub);
+				float4 Desat = clr / 2;
+				clr = lerp(clr, Desat, curProg);
 				clr = lerp(clr, _BGColor, prog);
 				clr = lerp(clr, _JasonColor+1-(bar+0.5), 1-bar);
 				return clr;

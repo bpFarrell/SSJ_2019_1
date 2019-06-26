@@ -30,6 +30,7 @@ Material:
     m_Floats:
     - _Blend: -0.63
     - _Kill: 0
+    - _Smooth: 1
     m_Colors:
     - _Col1: {r: 0, g: 1, b: 0.58882093, a: 1}
     - _Col2: {r: 0.5919976, g: 0, b: 1, a: 1}

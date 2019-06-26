@@ -67,6 +67,7 @@ public class GameManager : MonoBehaviour {
     public CardUse OnCardInvoke;
     public TurnComplete OnTurnComplete;
     public TurnComplete OnNewTurn;
+    public float playerSpeed = 2;
     public float rewindSpeed = 4;
     public bool playTurn;
     void Awake() {
@@ -97,10 +98,6 @@ public class GameManager : MonoBehaviour {
         //time = Mathf.Clamp(time,12, 22);
         _time = time;
         Shader.SetGlobalFloat("_T", time);
-        if (playTurn) {
-            playTurn = false;
-            PlayTurn();
-        }
         switch (state) {
             case GameState.TITLE:
                 break;
@@ -135,6 +132,10 @@ public class GameManager : MonoBehaviour {
         time += Mathf.Pow(fastf, 4) * Time.deltaTime * 10;
         time -= Mathf.Pow(rewind, 4) * Time.deltaTime * 10;
         time = Mathf.Clamp(time, (turnNumber - 1) * turnLength, turnNumber * turnLength);
+
+        if (player.GetButton("Start")) {
+            PlayTurn();
+        }
     }
     private void InSimulate() {
         float tempTime;
@@ -148,7 +149,7 @@ public class GameManager : MonoBehaviour {
                 time = tempTime;
             }
         } else {
-            tempTime = time + Time.deltaTime;
+            tempTime = time + Time.deltaTime*playerSpeed;
             if (tempTime > turnStartTime + turnLength) {
                 StartNewTurn();
             } else {

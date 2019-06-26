@@ -7,7 +7,9 @@ public class CamPost : MonoBehaviour
 {
     public Material postMat;
     public Material edgeMat;
+    public Material multiply;
     RenderTexture tempRT;
+    RenderTexture tempRT0;
     Camera cam;
     public static float frustumHeight;
     public static float frustumWidth;
@@ -20,6 +22,7 @@ public class CamPost : MonoBehaviour
         cam = GetComponent<Camera>();
         cam.depthTextureMode = DepthTextureMode.DepthNormals;
         tempRT = new RenderTexture(Screen.width, Screen.height, 0);
+        tempRT0 = new RenderTexture(Screen.width, Screen.height, 0);
 
     }
 
@@ -28,10 +31,11 @@ public class CamPost : MonoBehaviour
     {
         CalcCameraCrossSection();
     }
-    void OnRenderImage(RenderTexture src, RenderTexture dest)
-    {
+    void OnRenderImage(RenderTexture src, RenderTexture dest) {
+        multiply.SetTexture("_A", CamPostBoss.rt);
         Graphics.Blit(src, tempRT, postMat);
-        Graphics.Blit(tempRT, dest, edgeMat);
+        Graphics.Blit(tempRT, tempRT0, multiply);
+        Graphics.Blit(tempRT0, dest, edgeMat);
     }
     void CalcCameraCrossSection() {
         //TODO You should Remove me!

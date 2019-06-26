@@ -1,4 +1,4 @@
-﻿Shader "Hidden/EdgeCheck"
+﻿Shader "Hidden/EdgeCheckBoss"
 {
 	Properties
 	{
@@ -46,9 +46,10 @@
 			float _DepthSensitivity;
 			float _NormalSensitivity;
 			float effect_GetGBufferDifference(fixed4 a, fixed4 b) {
-				float deltaDepth = abs(DecodeFloatRG(a.zw) - DecodeFloatRG(b.zw)) > _DepthSensitivity;
-				float2 diffNormal = abs((a.xy*2-1) - (b.xy*2-1))* _NormalSensitivity;
-				float deltaNormal = (diffNormal.x + diffNormal.y)*_NormalSensitivity>0.1;
+				float deltaDepth = a.z - b.z > _DepthSensitivity;
+
+				float2 diffNormal = abs(a.xy - b.xy) * _NormalSensitivity;
+				float deltaNormal = (diffNormal.x + diffNormal.y) * _NormalSensitivity > 0.1;
 				return deltaDepth + deltaNormal;
 			}
 			float effect_GetEdge(sampler2D gBuffer, float2 uv) {
@@ -66,8 +67,8 @@
 			fixed4 frag (v2f i) : SV_Target
 			{
 				fixed4 col = tex2D(_MainTex,i.uv);
-				fixed edge = (1 - effect_GetEdge(_CameraDepthNormalsTexture, i.uv));
-				return col*edge;
+				fixed edge = (1 - effect_GetEdge(_MainTex, i.uv));
+				return fixed4(1,1,1,1)*edge;
 			}
 			ENDCG
 		}

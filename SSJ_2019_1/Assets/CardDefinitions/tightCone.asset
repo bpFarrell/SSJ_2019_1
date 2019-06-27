@@ -13,8 +13,11 @@ MonoBehaviour:
   m_Name: tightCone
   m_EditorClassIdentifier: 
   _name: Tight cone
-  _cost: 1
+  _cost: 2
   _type: 0
   _description: 
   _flavor: 
   _assetName: tightCone
+  _projectilePrefab: {fileID: 8773706794364134306, guid: c2a5e6b0138f025458d0ebc395854f13,
+    type: 3}
+  jsonString: '{"name":"Tight cone","type":"P","class":"Attack","cost":2,"resourceName":"tightCone","cardType":"projectile","duration":0,"shotCount":3,"shotCountScalar":1,"shotCountModifier":0,"shotFrequency":1,"shotFrequencyScalar":1,"shotFrequencyModifier":0,"shotSpread":15,"shotSpreadScalar":1,"shotSpreadModifier":0,"shotType":"simple"}'

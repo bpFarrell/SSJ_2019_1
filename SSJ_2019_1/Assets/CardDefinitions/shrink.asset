@@ -13,8 +13,12 @@ MonoBehaviour:
   m_Name: shrink
   m_EditorClassIdentifier: 
   _name: Shrink
-  _cost: 1
+  _cost: 2
   _type: 2
-  _description: Decrease hitbox size
+  _description: Decrease hitbox size for <b>2</b> turns.
   _flavor: 
   _assetName: shrink
+  _projectilePrefab: {fileID: 8773706794364134306, guid: c2a5e6b0138f025458d0ebc395854f13,
+    type: 3}
+  jsonString: '{"name":"Shrink","type":"U","class":"Buff","cost":2,"description":"Decrease
+    hitbox size for <b>2</b> turns.","resourceName":"shrink","cardType":"player","duration":2,"shotCount":0,"shotCountScalar":0,"shotCountModifier":0,"shotFrequency":0,"shotFrequencyScalar":0,"shotFrequencyModifier":0,"shotSpread":0,"shotSpreadScalar":0,"shotSpreadModifier":0}'

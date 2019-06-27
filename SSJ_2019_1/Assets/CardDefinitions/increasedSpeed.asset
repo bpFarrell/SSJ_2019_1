@@ -13,8 +13,12 @@ MonoBehaviour:
   m_Name: increasedSpeed
   m_EditorClassIdentifier: 
   _name: Increased Speed
-  _cost: 1
+  _cost: 2
   _type: 1
   _description: Increases the <b>Max Range</b> you can move in a turn.
   _flavor: 
   _assetName: increasedSpeed
+  _projectilePrefab: {fileID: 8773706794364134306, guid: c2a5e6b0138f025458d0ebc395854f13,
+    type: 3}
+  jsonString: '{"name":"Increased Speed","type":"M","class":"Buff","cost":2,"description":"Increases
+    the <b>Max Range</b> you can move in a turn.","resourceName":"increasedSpeed","cardType":"player","duration":1,"shotCount":0,"shotCountScalar":0,"shotCountModifier":0,"shotFrequency":0,"shotFrequencyScalar":0,"shotFrequencyModifier":0,"shotSpread":0,"shotSpreadScalar":0,"shotSpreadModifier":0}'

@@ -8,8 +8,8 @@ Material:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_Name: Unlit_CthuMotionDepth
-  m_Shader: {fileID: 4800000, guid: 7661bc1972a31c744a599fd1e62ed76d, type: 3}
-  m_ShaderKeywords: 
+  m_Shader: {fileID: 4800000, guid: 4acb0b9d496d3bc42aa848919331a713, type: 3}
+  m_ShaderKeywords: IS_DEPTH
   m_LightmapFlags: 4
   m_EnableInstancingVariants: 0
   m_DoubleSidedGI: 0

@@ -1,4 +1,6 @@
-﻿using System.Collections;
+﻿using SimpleJSON;
+using System;
+using System.Collections;
 using System.Collections.Generic;
 
 public class CardEffect{
@@ -18,18 +20,42 @@ public class CardEffect{
         none,
         simple, // 
         explosive,
-        pierce
+        pierce // Nope
     }
     // projectile
+    public int duration = 0;
     public int shotCount = 0;
+    public float shotCountScalar = 1f;
+    public int shotCountModifier = 0;
     public float shotFrequency = 0f;
+    public float shotFrequencyScalar = 1f;
+    public float shotFrequencyModifier = 0f;
     public int shotSpread = 0;
+    public float shotSpreadScalar = 1f;
+    public int shotSpreadModifier = 0;
+    public float recieveDamageScalar = 1f;
+    public int receiveDamageModifier = 0;
     public ShotType shotType = ShotType.none;
     
     // Player Stats
     // 
 
     public void Load(CardDefinition def) {
+        this.def = def;
+        duration = def.json["duration"].AsInt;
+        shotType = (ShotType)Enum.Parse(typeof(ShotType), def.json["shotType"]);
+        cardType = (CardType)Enum.Parse(typeof(CardType), def.json["cardType"]);
+        shotCount = def.json["shotCount"].AsInt;
+        shotCountScalar = def.json["shotCountScalar"].AsFloat;
+        shotCountModifier = def.json["shotCountModifier"].AsInt;
+        shotFrequency = def.json["shotFrequency"].AsFloat;
+        shotFrequencyScalar = def.json["shotFrequencyScalar"].AsFloat;
+        shotFrequencyModifier = def.json["shotFrequencyModifier"].AsFloat;
+        shotSpread = def.json["shotSpread"].AsInt;
+        shotSpreadScalar = def.json["shotSpreadScalar"].AsFloat;
+        shotSpreadModifier = def.json["shotSpreadModifier"].AsInt;
+        recieveDamageScalar = def.json["recieveDamageScalar"].AsFloat;
+        receiveDamageModifier = def.json["receiveDamageModifier"].AsInt;
     }
 }
 

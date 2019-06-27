@@ -51,8 +51,10 @@ public class CardDefinition : ScriptableObject {
         }
         private set { _projectilePrefab = value; }
     }
+    public string jsonString;
 
-    public JSONNode json;
+    private JSONNode _json = null;
+    public JSONNode json { get { return _json ? _json : _json = JSON.Parse(jsonString); } private set { _json = value; } }
 
     public void FromJSON(JSONNode json) {
         name = json["name"];
@@ -73,7 +75,7 @@ public class CardDefinition : ScriptableObject {
         description = json["description"];
         flavor = json["flavor"];
         assetName = json["resourceName"];
-        this.json = json;
+        jsonString = json.ToString();
     }
 
     public CardDefinition Copy {
@@ -87,6 +89,8 @@ public class CardDefinition : ScriptableObject {
             final.assetName = assetName;
             final.sprite = sprite;
             final.projectilePrefab = projectilePrefab;
+            final.jsonString = jsonString;
+            final.json = json;
             return final;
         }
     }

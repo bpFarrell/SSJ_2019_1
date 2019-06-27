@@ -160,7 +160,7 @@ public class Card : UIMonoBehaviour, ISelectHandler, IDeselectHandler, ICancelHa
         set {
             _handPose = value;
             displayPose.position.x = _handPose.position.x;
-            displayPose.position.y = _handPose.position.y + 75f;
+            displayPose.position.y = 130f;
             displayPose.rotation = Quaternion.identity;
             displayPose.scale = _handPose.scale * 1.3f;
         }

@@ -16,10 +16,22 @@ public class UISkillBar : UIMonoBehaviour {
         return costCoefficient * cost;
     }
 
-    private List<int> activeCardIDs = new List<int>();
-
     internal void Init() {
         GameManager.instance.OnCardInvoke += CardInvoked;
+        GameManager.instance.OnTurnComplete += TurnComplete;
+        GameManager.instance.OnNewTurn += NewTurn;
+    }
+
+    private void TurnComplete() {
+        for (int i = tabList.Length - 1; i >= 0; i--) {
+            if (tabList[i] == null) continue;
+            tabList[i].Cleanup();
+            tabList[i] = null;
+        }
+    }
+
+    private void NewTurn() {
+        
     }
 
     private void CardInvoked(CardDefinition def)
@@ -27,21 +39,25 @@ public class UISkillBar : UIMonoBehaviour {
         throw new NotImplementedException();
     }
 
-    public bool PlaceTab(CardDefinition def) {
+    public int PlaceTab(CardDefinition def) {
         for (int i = 0; i < tabList.Length; i++) {
             if (tabList[i] == null) continue;
             if (tabList[i].definition.GetHashCode() == def.GetHashCode()) {
-                return false;
+                return -1;
             }
         }
         int slot = nextAvailableIndex(def.cost);
         if (slot == -1) {
-            return false;
+            return -1;
         }
         SkillTab tab = Instantiate(tabPrefab, transform);
         tab.Load(def);
         MoveToSlot(tab, slot);
-        return true;
+        return slot;
+    }
+
+    public static float SlotToGT(int slot) {
+        return (slot * (GameManager.instance.turnLength / GameManager.instance.turnStepCount)) + ((GameManager.instance.turnNumber-1) * GameManager.instance.turnLength);
     }
 
     public void MoveToSlot(SkillTab tab, int index) {
@@ -53,6 +69,8 @@ public class UISkillBar : UIMonoBehaviour {
 
     internal void Cleanup() {
         GameManager.instance.OnCardInvoke -= CardInvoked;
+        GameManager.instance.OnTurnComplete -= TurnComplete;
+        GameManager.instance.OnNewTurn -= NewTurn;
     }
 
     internal void Process() {

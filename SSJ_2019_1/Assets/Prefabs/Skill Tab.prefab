@@ -35,7 +35,7 @@ RectTransform:
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 0}
   m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 36, y: 36}
+  m_SizeDelta: {x: 18, y: 20}
   m_Pivot: {x: 0, y: 1}
 --- !u!222 &2021329508794742484
 CanvasRenderer:
@@ -111,7 +111,7 @@ RectTransform:
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 0, y: 1}
   m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 144, y: 35.5}
+  m_SizeDelta: {x: 144, y: 10}
   m_Pivot: {x: 0, y: 1}
 --- !u!222 &2021329510366468999
 CanvasRenderer:
@@ -162,5 +162,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e7745763d45462448897a9c4e58628dc, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  definition: {fileID: 0}
   tabColor: {fileID: 2021329510366468998}
   handleColor: {fileID: 2021329508794742487}

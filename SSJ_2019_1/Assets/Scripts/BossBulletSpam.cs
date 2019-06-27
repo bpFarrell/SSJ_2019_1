@@ -11,8 +11,8 @@ public class BossBulletSpam : TimeObject
     public float mag=1;
     public float freq=1;
     bool alternate;
+    public GameObject renderObjects;
     Stack<KeyValuePair<float, float>> damageStack = new Stack<KeyValuePair<float, float>>();
-    MeshRenderer mr;
     private void OnEnable() {
         GameManager.instance.OnNewTurn += OnNewTurn;
     }
@@ -24,7 +24,6 @@ public class BossBulletSpam : TimeObject
         startPos = transform.position;
         evaluable = new IEvaluable();
         scheduledDeathTime = float.MaxValue;
-        mr = GetComponent<MeshRenderer>();
         evaluable.eval = (t) => { return new Vector3(0,
             Mathf.PerlinNoise(0, t*freq) * mag+ Mathf.PerlinNoise(2, t*freq*0.5f) * mag*2,0)+
             startPos; };
@@ -99,7 +98,7 @@ public class BossBulletSpam : TimeObject
         }
     }
     public override void Resurrect() {
-        mr.enabled = true;
+        renderObjects.SetActive(true);
     }
     private void CheckDamageRewind() {
         if (damageStack.Count == 0) return;
@@ -118,7 +117,7 @@ public class BossBulletSpam : TimeObject
             if(GameManager.instance.state== GameState.SIMULATE_PLAY)
                 GameManager.ChangeState(GameState.END);
             Kill(GameManager.time);
-            mr.enabled = false;
+            renderObjects.SetActive(false);
         }
     }
     void OnNewTurn() {

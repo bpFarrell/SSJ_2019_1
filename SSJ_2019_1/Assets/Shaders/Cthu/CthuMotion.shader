@@ -12,6 +12,7 @@ Tags { "Queue" = "Transparent" "RenderType" = "Transparent" "IgnoreProjector" = 
         Pass
         {
             CGPROGRAM
+			#pragma shader_feature IS_DEPTH
             #pragma vertex vert
             #pragma fragment frag
             // make fog work
@@ -23,6 +24,7 @@ Tags { "Queue" = "Transparent" "RenderType" = "Transparent" "IgnoreProjector" = 
             {
                 float4 vertex : POSITION;
                 float2 uv : TEXCOORD0;
+				float3 normal : NORMAL;
             };
 
             struct v2f
@@ -32,6 +34,7 @@ Tags { "Queue" = "Transparent" "RenderType" = "Transparent" "IgnoreProjector" = 
                 float4 vertex : SV_POSITION;
 				float4 screenPos : TEXCOORD1;
 				float4 worldPos : TEXCOORD2;
+				float3 normal : TEXCOORD3;
             };
 
             sampler2D _MainTex;
@@ -45,14 +48,22 @@ Tags { "Queue" = "Transparent" "RenderType" = "Transparent" "IgnoreProjector" = 
                 o.vertex = UnityObjectToClipPos(v.vertex);
                 o.uv = TRANSFORM_TEX(v.uv, _MainTex);
 				o.screenPos = ComputeScreenPos(o.vertex);
+				o.normal = mul(UNITY_MATRIX_MV, v.normal);
                 UNITY_TRANSFER_FOG(o,o.vertex);
                 return o;
             }
 
 			fixed4 frag(v2f i) : SV_Target
 			{
+				fixed4 col;
+#if IS_DEPTH
+			float4 clip = i.screenPos / i.screenPos.w;
+			col = fixed4(i.normal.xy* 0.5 + 0.5, clip.z, 1);
+#else
+			col = fixed4(.8, i.worldPos.z, .5, 1);
+#endif
 
-				return fixed4(.8,i.worldPos.z,.5,1);
+			return col;
             }
             ENDCG
         }

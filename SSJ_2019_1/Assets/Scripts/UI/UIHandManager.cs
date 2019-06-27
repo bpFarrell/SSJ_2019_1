@@ -64,10 +64,11 @@ public class UIHandManager : Parabola {
     }
 
     internal static void CardTriggered(CardDefinition definition) {
-        UIManager.skillManager.PlaceTab(definition);
+        int slot = UIManager.skillManager.PlaceTab(definition);
+        if (slot == -1) return;
         CardEffect effect = new CardEffect();
         effect.Load(definition);
-        UIManager.CETurnManager.projectileEffects.Add(new KeyValuePair<float, CardEffect>(GameManager.time, effect));
+        UIManager.CETurnManager.projectileEffects.Add(new KeyValuePair<float, CardEffect>(UISkillBar.SlotToGT(slot), effect));
     }
 
     public void RemoveCards() {

@@ -13,8 +13,12 @@ MonoBehaviour:
   m_Name: reloadPierce
   m_EditorClassIdentifier: 
   _name: 'Reload: Pierce'
-  _cost: 1
+  _cost: 4
   _type: 0
   _description: Projects now <b>Penetrates</b> targets.
   _flavor: 
   _assetName: reloadPierce
+  _projectilePrefab: {fileID: 8773706794364134306, guid: c2a5e6b0138f025458d0ebc395854f13,
+    type: 3}
+  jsonString: '{"name":"Reload: Pierce","type":"P","class":"Buff","cost":4,"description":"Projects
+    now <b>Penetrates</b> targets.","resourceName":"reloadPierce","cardType":"hand","duration":0,"shotCount":0,"shotCountScalar":0,"shotCountModifier":0,"shotFrequency":0,"shotFrequencyScalar":0,"shotFrequencyModifier":0,"shotSpread":0,"shotSpreadScalar":0,"shotSpreadModifier":0,"shotType":"pierce"}'

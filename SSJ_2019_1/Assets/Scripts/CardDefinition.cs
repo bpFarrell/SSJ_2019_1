@@ -39,15 +39,16 @@ public class CardDefinition : ScriptableObject {
     private static CardTimeObject _projectilePrefabDefault;
     public static CardTimeObject projectilePrefabDefault {
         get {
-            return _projectilePrefabDefault ? _projectilePrefabDefault = Resources.Load<CardTimeObject>("CardProjectileBase.asset") : _projectilePrefabDefault; 
+            return _projectilePrefabDefault==null ? _projectilePrefabDefault = Resources.Load<CardTimeObject>("CardProjectileBase.prefab") : _projectilePrefabDefault; 
         }
     }
+    [SerializeField]
     private CardTimeObject _projectilePrefab;
     public CardTimeObject projectilePrefab {
         get {
             if (_projectilePrefab == null)
-                _projectilePrefab = Resources.Load<CardTimeObject>(assetName + ".asset");
-            return _projectilePrefab ? projectilePrefabDefault : _projectilePrefab;
+                _projectilePrefab = Resources.Load<CardTimeObject>(assetName + ".prefab");
+            return _projectilePrefab==null ? projectilePrefabDefault : _projectilePrefab;
         }
         private set { _projectilePrefab = value; }
     }

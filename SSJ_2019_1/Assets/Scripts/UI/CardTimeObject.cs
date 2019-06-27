@@ -5,17 +5,21 @@ public class CardTimeObject : TimeObject {
 
     public MeshRenderer mr;
     public Collider col;
-    public void Init(IEvaluable parent, CardEffect details) {
-        Load(details);
+    public void Init(IEvaluable parent, CardEffect effect) {
+        Load(effect);
         evaluable = new IEvaluable();
         evaluable.eval = (t) => { return parent.eval(spawnTime) + dir * t; };
+        RotateThatBitch();
     }
-    protected void Load(CardEffect details) {
-        effect = details;
+    protected void Load(CardEffect effect) {
+        this.effect = effect;
     }
     void Update() {
         TimeUpdate();
         if (dead) return;
+    }
+    void RotateThatBitch() {
+        transform.rotation = Quaternion.LookRotation(Vector3.forward, dir);
     }
     public override void BeforeBirth() {
         Destroy(gameObject);

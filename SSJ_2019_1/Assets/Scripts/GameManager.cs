@@ -50,6 +50,7 @@ public class GameManager : MonoBehaviour {
     public static float time = 0;
     public float _time;
     public float turnLength = 5f;
+    public int turnStepCount = 10;
     public int turnNumber = 0;
     bool isRewindingForSimulation;
     public float turnStartTime {

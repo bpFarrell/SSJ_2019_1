@@ -8,6 +8,6 @@ public class CardResourceHandler : UISingletonBehaviour<CardResourceHandler> {
 
     public static CardDefinition GetRandomCard() {
         int index = Random.Range(0, instance.cardDefList.Count);
-        return instance.cardDefList[index];
+        return instance.cardDefList[index].Copy;
     }
 }

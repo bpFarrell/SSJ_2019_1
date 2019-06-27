@@ -33,9 +33,8 @@ public class SkillTab : UIMonoBehaviour {
         SetSize(def.cost);
     }
 
-    public List<CardEffect> cardEffects = new List<CardEffect>(); 
     public void Cleanup() {
-
+        Destroy(gameObject);
     }
 
     public void SetSize(int cost) {

@@ -10,7 +10,7 @@ public class CardEffectTurnManager {
 
     private float time { get { return GameManager.time; } }
     private float lastEvaluated = 0f;
-    private float evalStep { get { return GameManager.instance.turnLength / 10; } }
+    public float evalStep { get { return GameManager.instance.turnLength / 10; } }
 
     public void Init() {
         GameManager.instance.OnTurnComplete += TurnComplete;
@@ -26,7 +26,7 @@ public class CardEffectTurnManager {
         if (time < lastEvaluated) {
             lastEvaluated -= evalStep;
         }
-        if (time > lastEvaluated + evalStep) {
+        if (time >= lastEvaluated + evalStep) {
             lastEvaluated += evalStep;
 
             ProcessProjectiles();
@@ -36,7 +36,7 @@ public class CardEffectTurnManager {
     public void ProcessProjectiles() {
         for (int i = 0; i < projectileEffects.Count; i++) {
             if (projectileEffects[i].Value == null) continue;
-            if (projectileEffects[i].Key != lastEvaluated) return;
+            if (projectileEffects[i].Key != lastEvaluated) continue;
 
             EffectToTimeObject(projectileEffects[i].Value);
         }
@@ -45,13 +45,13 @@ public class CardEffectTurnManager {
     public void EffectToTimeObject(CardEffect effect) {
        for (int i = 0; i < effect.shotCount; i++) {
             float angle = (effect.shotSpread / effect.shotCount) * i;
-            CardTimeObject obj = GameObject.Instantiate<CardTimeObject>(effect.def.projectilePrefab);
+            CardTimeObject obj = GameObject.Instantiate<CardTimeObject>(effect.def.projectilePrefab, GameManager.instance.transform);
             obj.dir = new Vector3(
                 -Mathf.Sin(angle),
                 -Mathf.Cos(angle),
                 0) * 2;
-            obj.scheduledDeathTime = 5;
-            obj.spawnTime = GameManager.time + 0.1f;
+            obj.scheduledDeathTime = 5f;
+            obj.spawnTime = lastEvaluated - 0.1f;
             obj.Init(GameManager.instance.player.evaluable, effect);
         }
     }

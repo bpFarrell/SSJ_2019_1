@@ -13,6 +13,9 @@ public class BossBulletSpam : TimeObject
     bool alternate;
     public GameObject renderObjects;
     Stack<KeyValuePair<float, float>> damageStack = new Stack<KeyValuePair<float, float>>();
+    public GameObject[] tentColor;
+    public GameObject[] tentDepth;
+    int nextDeadTent;
     private void OnEnable() {
         GameManager.instance.OnNewTurn += OnNewTurn;
     }
@@ -104,6 +107,10 @@ public class BossBulletSpam : TimeObject
         if (damageStack.Count == 0) return;
         if (GameManager.time < damageStack.Peek().Key) {
             hp += (int)damageStack.Pop().Value;
+
+            nextDeadTent--;
+            tentColor[nextDeadTent].SetActive(true);
+            tentDepth[nextDeadTent].SetActive(true);
         }
     }
     private void OnTriggerEnter(Collider other) {
@@ -111,6 +118,9 @@ public class BossBulletSpam : TimeObject
         TimeObject to = other.GetComponent<TimeObject>();
         to.Kill(GameManager.time);
         hp--;
+        tentColor[nextDeadTent].SetActive(false);
+        tentDepth[nextDeadTent].SetActive(false);
+        nextDeadTent++;
         damageStack.Push(new KeyValuePair<float, float>(GameManager.time, 1));
         if (hp <= 0) {
             Debug.Log("Killed the boss!");

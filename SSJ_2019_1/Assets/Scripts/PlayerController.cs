@@ -40,6 +40,7 @@ public class PlayerController : MonoBehaviour, ITimeObject {
             TryBounds();
         }
         TryRecordPos();
+        return;
         TryShoot();
         if (player.GetButtonDown("Confirm")) {
             for (int x = 0; x < 3; x++) {

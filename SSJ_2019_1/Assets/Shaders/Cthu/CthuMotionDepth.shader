@@ -16,8 +16,9 @@
             // make fog work
             #pragma multi_compile_fog
 
+			//float _T;
             #include "UnityCG.cginc"
-
+			#include "Assets/Cthul.cginc"
             struct appdata
             {
                 float4 vertex : POSITION;
@@ -36,11 +37,10 @@
 
             sampler2D _MainTex;
             float4 _MainTex_ST;
-			float _T;
             v2f vert (appdata v)
             {
                 v2f o;
-				v.vertex.z +=sin(v.vertex.y+_T);
+				v.vertex = CthulMain(v.vertex);
                 o.vertex = UnityObjectToClipPos(v.vertex);
                 o.uv = TRANSFORM_TEX(v.uv, _MainTex);
 				o.screenPos = ComputeScreenPos(o.vertex);

@@ -72,8 +72,11 @@ public class PlayerController : MonoBehaviour, ITimeObject {
         poses.RemoveRange(currentFrame + 1, length);
     }
     Vector3 GetCurrentPos() {
-        Vector3 newPos = Vector3.Lerp(poses[currentFrame], poses[currentFrame + 1], percentThroughFrame);
+        int a = Mathf.Min(currentFrame, poses.Count - 1); 
+        int b = Mathf.Min(currentFrame + 1, poses.Count-1);
+        Vector3 newPos = Vector3.Lerp(poses[a], poses[b], percentThroughFrame);
         return newPos;
+       
     }
     Vector3 GetPosAtTime(float time) {
         int currentFrame = Mathf.FloorToInt(time / poseSaveIntervals);

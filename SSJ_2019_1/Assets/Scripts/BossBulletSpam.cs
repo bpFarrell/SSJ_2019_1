@@ -11,6 +11,7 @@ public class BossBulletSpam : TimeObject
     public float mag=1;
     public float freq=1;
     bool alternate;
+    Stack<KeyValuePair<float, float>> damageStack = new Stack<KeyValuePair<float, float>>();
     MeshRenderer mr;
     private void OnEnable() {
         GameManager.instance.OnNewTurn += OnNewTurn;
@@ -34,6 +35,7 @@ public class BossBulletSpam : TimeObject
     {
 
         TimeUpdate();
+        CheckDamageRewind();
         if (dead) return;
         if (GameManager.time < lastSpawn) {
             lastSpawn -= spawnRate;
@@ -99,14 +101,22 @@ public class BossBulletSpam : TimeObject
     public override void Resurrect() {
         mr.enabled = true;
     }
+    private void CheckDamageRewind() {
+        if (damageStack.Count == 0) return;
+        if (GameManager.time < damageStack.Peek().Key) {
+            hp += (int)damageStack.Pop().Value;
+        }
+    }
     private void OnTriggerEnter(Collider other) {
         //if (other.gameObject.layer == LayerMask.NameToLayer("EnemyBullet")) return;
         TimeObject to = other.GetComponent<TimeObject>();
         to.Kill(GameManager.time);
         hp--;
+        damageStack.Push(new KeyValuePair<float, float>(GameManager.time, 1));
         if (hp <= 0) {
             Debug.Log("Killed the boss!");
-            GameManager.ChangeState(GameState.END);
+            if(GameManager.instance.state== GameState.SIMULATE_PLAY)
+                GameManager.ChangeState(GameState.END);
             Kill(GameManager.time);
             mr.enabled = false;
         }

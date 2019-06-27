@@ -8,6 +8,7 @@ public class CamPost : MonoBehaviour
     public Material postMat;
     public Material edgeMat;
     public Material multiply;
+    public Material panel;
     RenderTexture tempRT;
     RenderTexture tempRT0;
     Camera cam;
@@ -35,7 +36,8 @@ public class CamPost : MonoBehaviour
         multiply.SetTexture("_A", CamPostBoss.rt);
         Graphics.Blit(src, tempRT, postMat);
         Graphics.Blit(tempRT, tempRT0, multiply);
-        Graphics.Blit(tempRT0, dest, edgeMat);
+        Graphics.Blit(tempRT0, tempRT, edgeMat);
+        Graphics.Blit(tempRT, dest, panel);
     }
     void CalcCameraCrossSection() {
         //TODO You should Remove me!

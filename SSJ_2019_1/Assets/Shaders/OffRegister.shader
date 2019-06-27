@@ -73,12 +73,13 @@
 				float4 dot;// = distance(fixed2(0.5, 0.5), subUV) - cmyk1.w;
 
 				dot.x = GetPass(i.uv + texel * _Offset1.xy * _Offset2.z, texel, 0);
-				//dot.yzw = 0;
 				dot.y = GetPass(i.uv + texel * _Offset1.zw * _Offset2.z, texel, 1);
 				dot.z = GetPass(i.uv + texel * _Offset2.xy * _Offset2.z, texel, 2);
 				dot.w = GetPass(i.uv, texel, 3);
 
 				fixed4 rgb = cmyk2rgb(dot).xyzz;
+				float frameSize = 20;
+
                 return rgb;
             }
             ENDCG

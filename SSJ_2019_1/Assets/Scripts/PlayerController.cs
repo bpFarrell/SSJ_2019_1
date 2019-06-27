@@ -27,11 +27,11 @@ public class PlayerController : MonoBehaviour, ITimeObject {
     }
     void Update() {
 
-        if (GameManager.instance.state != GameState.CARD_SELECT) {
-            transform.position = GetCurrentPos();
+        Player player = ReInput.players.GetPlayer(0);
+        if (GameManager.instance.state != GameState.CARD_SELECT || player.GetAxis("Rewind")!=0 || player.GetAxis("Fastforward")!=0) {
+            transform.position = GetCurrentPos();                  
             return;
         }
-        Player player = ReInput.players.GetPlayer(0);
         Vector3 dir = new Vector3(player.GetAxis("MoveHori"), player.GetAxis("MoveVert"), 0);
         if (dir.magnitude > Mathf.Epsilon&&!GameManager.instance.isAtEndOfTurn) {
             GameManager.time += dir.magnitude * Time.deltaTime * moveTimeScalar;
@@ -40,7 +40,7 @@ public class PlayerController : MonoBehaviour, ITimeObject {
             TryBounds();
         }
         TryRecordPos();
-        return;
+        //return;
         TryShoot();
         if (player.GetButtonDown("Confirm")) {
             for (int x = 0; x < 3; x++) {
@@ -118,12 +118,14 @@ public class PlayerController : MonoBehaviour, ITimeObject {
         transform.position = clampedPos;
     }
     private void OnTriggerEnter(Collider other) {
-        StartDeath();
+        if(GameManager.instance.state== GameState.CARD_SELECT)
+            StartDeath();
         TimeObject to = other.GetComponent<TimeObject>();
         if(to!=null)
             to.Kill(GameManager.time);
     }
     private void StartDeath() {
+        GameManager.ChangeState(GameState.IS_DYING);
         Debug.Log("You are dying!");
     }
 }

@@ -33,7 +33,10 @@ public enum GameState
     /// Credits
     /// </summary>
     CREDITS         = 0x20,
-
+    /// <summary>
+    /// After death has been played, and partial controll has been giving back
+    /// </summary>
+    IS_RESURECTING  = 0x40,
     /// <summary>
     /// A flag when the state is in the menu
     /// </summary>
@@ -71,11 +74,19 @@ public class GameManager : MonoBehaviour {
     public float playerSpeed = 2;
     public float rewindSpeed = 4;
     public bool playTurn;
+    public Material panelMat;
+    public bool panelTransit;
+    public float panelTransitSpeed = 10;
+    float currentPanelTransit;
+    float deathPlayTime = 3;
+    float currentDeathTime;
+    float deathStartTime;
     void Awake() {
         instance = this;
     }
     private void Start() {
         ChangeState(GameState.CARD_SELECT);
+        OnStateChange += StateChanged;
     }
     public static void ChangeState(GameState newState) {
         if (newState == instance.state) return;
@@ -99,6 +110,9 @@ public class GameManager : MonoBehaviour {
         //time = Mathf.Clamp(time,12, 22);
         _time = time;
         Shader.SetGlobalFloat("_T", time);
+        if (panelTransit) {
+            PanelTransit();
+        }
         switch (state) {
             case GameState.TITLE:
                 break;
@@ -109,6 +123,7 @@ public class GameManager : MonoBehaviour {
                 InSimulate();
                 break;
             case GameState.IS_DYING:
+                IsDying();
                 break;
             case GameState.PLAY:
                 break;
@@ -116,8 +131,31 @@ public class GameManager : MonoBehaviour {
                 break;
             case GameState.CREDITS:
                 break;
+            case GameState.IS_RESURECTING:
+                IsResurecting();
+                break;
             default:
                 break;
+        }
+    }
+    void StateChanged(GameState old, GameState now) {
+        if(now== GameState.IS_DYING) {
+            deathStartTime = time;
+            currentDeathTime = 0;
+        }
+    }
+    void IsResurecting() {
+        Player player = ReInput.players.GetPlayer(0);
+        float rewind = player.GetAxis("Rewind");
+        time -= Mathf.Pow(rewind, 4) * Time.deltaTime * 5;
+        if (time > deathStartTime)
+            ChangeState(GameState.CARD_SELECT);
+    }
+    void IsDying() {
+        currentDeathTime += Time.deltaTime;
+        time += Time.deltaTime;
+        if (currentDeathTime > deathPlayTime) {
+            ChangeState(GameState.IS_RESURECTING);
         }
     }
     void PlayTurn() {
@@ -130,8 +168,8 @@ public class GameManager : MonoBehaviour {
         Player player = ReInput.players.GetPlayer(0);
         float rewind = player.GetAxis("Rewind");
         float fastf = player.GetAxis("Fastforward");
-        time += Mathf.Pow(fastf, 4) * Time.deltaTime * 10;
-        time -= Mathf.Pow(rewind, 4) * Time.deltaTime * 10;
+        time += Mathf.Pow(fastf, 4) * Time.deltaTime * 5;
+        time -= Mathf.Pow(rewind, 4) * Time.deltaTime * 5;
         time = Mathf.Clamp(time, (turnNumber - 1) * turnLength, turnNumber * turnLength);
 
         if (player.GetButton("Start")) {
@@ -158,11 +196,21 @@ public class GameManager : MonoBehaviour {
             }
         }
     }
+    void PanelTransit() {
+        currentPanelTransit += Time.deltaTime * panelTransitSpeed;
+        if (currentPanelTransit > 1) {
+            currentPanelTransit = 0;
+            panelTransit = false;
+        }
+        panelMat.SetFloat("_Pan", currentPanelTransit);
+    }
     private void StartNewTurn() {
         ChangeState(GameState.CARD_SELECT);
         turnNumber++;
         time = turnStartTime + Mathf.Epsilon;
         Debug.Log("started turn " + turnNumber);
+
+        panelTransit = true;
         if (OnTurnComplete != null)
             OnTurnComplete();
         if (OnNewTurn != null)

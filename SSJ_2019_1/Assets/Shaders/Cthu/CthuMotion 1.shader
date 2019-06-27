@@ -1,4 +1,4 @@
-﻿Shader "Unlit/CthuMotion"
+﻿Shader "Unlit/CthuMotion 1"
 {
     Properties
     {
@@ -43,7 +43,7 @@ Tags { "Queue" = "Transparent" "RenderType" = "Transparent" "IgnoreProjector" = 
             v2f vert (appdata v)
             {
                 v2f o;
-				v.vertex = CthulMain(v.vertex);
+				v.vertex = CthulTent(v.vertex,v.uv);
 				o.worldPos = v.vertex;
                 o.vertex = UnityObjectToClipPos(v.vertex);
                 o.uv = TRANSFORM_TEX(v.uv, _MainTex);
@@ -56,7 +56,6 @@ Tags { "Queue" = "Transparent" "RenderType" = "Transparent" "IgnoreProjector" = 
 			fixed4 frag(v2f i) : SV_Target
 			{
 				fixed4 col;
-				
 #if IS_DEPTH
 			float4 clip = i.screenPos / i.screenPos.w;
 			i.normal = normalize(i.normal);

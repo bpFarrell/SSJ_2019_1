@@ -79,7 +79,7 @@ public class GameManager : MonoBehaviour {
     public bool panelTransit;
     public float panelTransitSpeed = 10;
     float currentPanelTransit;
-    float deathPlayTime = 3;
+    float deathPlayTime = 2;
     float currentDeathTime;
     float deathStartTime;
     void Awake() {
@@ -149,7 +149,7 @@ public class GameManager : MonoBehaviour {
         Player player = ReInput.players.GetPlayer(0);
         float rewind = player.GetAxis("Rewind");
         time -= Mathf.Pow(rewind, 4) * Time.deltaTime * 5;
-        if (time > deathStartTime)
+        if (time < deathStartTime-0.2f)
             ChangeState(GameState.CARD_SELECT);
     }
     void IsDying() {

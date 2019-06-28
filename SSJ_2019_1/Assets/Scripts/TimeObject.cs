@@ -42,14 +42,17 @@ public class TimeObject : MonoBehaviour, ITimeObject {
     /// Are you currently dead at this point in perceived time
     /// </summary>
     public bool dead;
-
+    public float? prebirthSpawnTime = null;
     /// <summary>
     /// Call this to update the continuous position.
     /// </summary>
     public virtual void TimeUpdate() {
         transform.position = evaluable.eval(t);
         CheckDeath();
-        if (t < 0) {
+        if (t < 0&& prebirthSpawnTime == null) {
+            BeforeBirth();
+        }
+        if (prebirthSpawnTime != null && GameManager.time - prebirthSpawnTime < 0) {
             BeforeBirth();
         }
     }

@@ -47,11 +47,12 @@ public class CardEffectTurnManager {
             float angle = (effect.shotSpread / effect.shotCount) * i;
             CardTimeObject obj = GameObject.Instantiate<CardTimeObject>(effect.def.projectilePrefab, GameManager.instance.transform);
             obj.dir = new Vector3(
+                Mathf.Cos(angle),
                 -Mathf.Sin(angle),
-                -Mathf.Cos(angle),
                 0) * 2;
             obj.scheduledDeathTime = 5f;
-            obj.spawnTime = lastEvaluated - 0.1f;
+            obj.spawnTime = lastEvaluated + ((float)i) * 0.2f;
+            obj.prebirthSpawnTime = lastEvaluated;
             obj.Init(GameManager.instance.player.evaluable, effect);
         }
     }

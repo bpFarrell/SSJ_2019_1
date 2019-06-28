@@ -24,6 +24,7 @@ Tags { "Queue" = "Transparent" "RenderType" = "Transparent" "IgnoreProjector" = 
             {
                 float4 vertex : POSITION;
                 float2 uv : TEXCOORD0;
+				float2 uv2 :TEXCOORD1;
 				float3 normal : NORMAL;
             };
 
@@ -35,6 +36,7 @@ Tags { "Queue" = "Transparent" "RenderType" = "Transparent" "IgnoreProjector" = 
 				float4 screenPos : TEXCOORD1;
 				float4 worldPos : TEXCOORD2;
 				float3 normal : TEXCOORD3;
+				
             };
 
             sampler2D _MainTex;
@@ -43,7 +45,7 @@ Tags { "Queue" = "Transparent" "RenderType" = "Transparent" "IgnoreProjector" = 
             v2f vert (appdata v)
             {
                 v2f o;
-				v.vertex = CthulTent(v.vertex,v.uv);
+				v.vertex = CthulTent(v.vertex,v.uv,v.uv2);
 				o.worldPos = v.vertex;
                 o.vertex = UnityObjectToClipPos(v.vertex);
                 o.uv = TRANSFORM_TEX(v.uv, _MainTex);

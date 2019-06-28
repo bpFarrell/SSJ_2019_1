@@ -64,7 +64,7 @@ public class UIHandManager : Parabola {
     }
 
     internal static void CardTriggered(CardDefinition definition) {
-        int slot = UIManager.skillManager.PlaceTab(definition);
+        int slot = UIManager.skillManager.PlaceTab(definition, GameManager.instance.percentThroughTurn);
         if (slot == -1) return;
         CardEffect effect = new CardEffect();
         effect.Load(definition);
@@ -76,7 +76,7 @@ public class UIHandManager : Parabola {
         for (int i = steps - 1; i >= 0; i--)
         {
             // Discard Pile ?
-            Destroy(cardList[i].gameObject);
+            cardList[i].Cleanup();
             cardList.RemoveAt(i);
         }
     }

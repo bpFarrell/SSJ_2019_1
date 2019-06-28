@@ -40,13 +40,15 @@ public class Card : UIMonoBehaviour, ISelectHandler, IDeselectHandler, ICancelHa
     public void OnSelect(BaseEventData eventData) {
         UIManager.handManager.hidden = false;
         UIManager.handManager.selectionIndex = handIndex;
+        UIManager.skillManager.SetHighlight(definition);
     }
 
     public void OnDeselect(BaseEventData eventData) {
         // Do something?
     }
     public void OnCancel(BaseEventData eventData) {
-        EventSystem.current.SetSelectedGameObject(UICenter.instance.gameObject, eventData);
+        UIManager.skillManager.RemoveTab(definition);
+        //EventSystem.current.SetSelectedGameObject(UICenter.instance.gameObject, eventData);
     }
     public void OnSubmit(BaseEventData eventData) {
         Debug.Log("Selected Card: " + definition.name);
@@ -100,6 +102,10 @@ public class Card : UIMonoBehaviour, ISelectHandler, IDeselectHandler, ICancelHa
                 costBackground.color = UIManager.instance.utilityPallet.hue;
                 break;
         }
+    }
+
+    internal void Cleanup() {
+        Destroy(gameObject);
     }
 
     // Movement

@@ -10,7 +10,7 @@ public class UISkillBar : UIMonoBehaviour {
     private const int TOTALSLOTS = 10;
     public static float costCoefficient { get { return TOTALWIDTH / TOTALSLOTS; } }
 
-    public SkillTab[] tabList = new SkillTab[10];
+    public SkillTab[] tabList = new SkillTab[TOTALSLOTS];
 
     private static float GetWidthFromCost(int cost) {
         return costCoefficient * cost;
@@ -39,25 +39,57 @@ public class UISkillBar : UIMonoBehaviour {
         throw new NotImplementedException();
     }
 
+
     public int PlaceTab(CardDefinition def) {
+        return PlaceTab(def, 0f);
+    }
+
+    internal void SetHighlight(CardDefinition definition) {
+        for (int i = 0; i < TOTALSLOTS; i++) {
+            if (tabList[i] == null) continue;
+            if (definition == tabList[i].definition){
+                tabList[i].highlit = true;
+            } else {
+                tabList[i].highlit = false;
+            }
+        }
+    }
+
+    public int PlaceTab(CardDefinition def, float localTime) {
         for (int i = 0; i < tabList.Length; i++) {
             if (tabList[i] == null) continue;
             if (tabList[i].definition.GetHashCode() == def.GetHashCode()) {
                 return -1;
             }
         }
-        int slot = nextAvailableIndex(def.cost);
+        int slot = nextAvailableIndex(def.cost, LocalTimeToSlot(localTime));
         if (slot == -1) {
             return -1;
         }
         SkillTab tab = Instantiate(tabPrefab, transform);
         tab.Load(def);
         MoveToSlot(tab, slot);
+        // Timey Whimy Stuff
+        GameManager.time = SlotToGT(slot) - 0.2f;
+
         return slot;
+    }
+
+    public void RemoveTab(CardDefinition def) {
+        for (int i = 0; i < TOTALSLOTS; i++) {
+            if (tabList[i] == null) continue;
+            if (tabList[i].definition == def) {
+                tabList[i].Cleanup();
+            }
+        }
     }
 
     public static float SlotToGT(int slot) {
         return (slot * (GameManager.instance.turnLength / GameManager.instance.turnStepCount)) + ((GameManager.instance.turnNumber-1) * GameManager.instance.turnLength);
+    }
+
+    public static int LocalTimeToSlot(float localTime) {
+        return (int)Mathf.Floor(localTime * TOTALSLOTS);
     }
 
     public void MoveToSlot(SkillTab tab, int index) {
@@ -78,19 +110,26 @@ public class UISkillBar : UIMonoBehaviour {
     }
 
     public int nextAvailableIndex(int cost) {
-        int index = 0;
+        return nextAvailableIndex(cost, 0);
+    }
+    public int nextAvailableIndex(int cost, int start) {
+        start = Mathf.Clamp(start, 0, TOTALSLOTS);
         int startNull = -1;
-        for (; index < 10; index++) {
-            if (tabList[index] != null) {
+        for (int index = start; index < TOTALSLOTS; index++)
+        {
+            if (tabList[index] != null)
+            {
                 startNull = -1;
                 continue;
             }
             if (cost == 1) return index;
-            if (startNull == -1) {
+            if (startNull == -1)
+            {
                 startNull = index;
                 continue;
             }
-            if(index - startNull + 1 == cost) {
+            if (index - startNull + 1 == cost)
+            {
                 return startNull;
             }
         }
@@ -103,7 +142,7 @@ public class UISkillBar : UIMonoBehaviour {
 
         Vector3 first = (Vector3)(MainCanvas.transform.localScale * rectTransform.rect.min) + rectTransform.position;
         first += Vector3.up * (rectTransform.rect.size.y / 2);
-        for (int i = 0; i < 10; i++) {
+        for (int i = 0; i < TOTALSLOTS; i++) {
             if(tabList[i] != null)
                 Gizmos.DrawSphere(first + (MainCanvas.transform.localScale.x * (Vector3.right * costCoefficient * i)), 20f);
         }

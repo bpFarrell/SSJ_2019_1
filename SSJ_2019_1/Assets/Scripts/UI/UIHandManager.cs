@@ -12,6 +12,7 @@ public class UIHandManager : Parabola {
     public override int steps { get { return cardList.Count; } }
 
     internal void Init() {
+        GenerateHand();
         GameManager.instance.OnNewTurn += NewTurn;
         GameManager.instance.OnTurnComplete += TurnComplete;
     }

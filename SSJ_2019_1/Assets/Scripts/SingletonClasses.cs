@@ -89,7 +89,7 @@ public abstract class UIMonoBehaviour : MonoBehaviour {
     {
         get
         {
-            return _MainCanvas ?? (_MainCanvas = GetMainCanvas());
+            return _MainCanvas == null ? (_MainCanvas = GetMainCanvas()) : _MainCanvas;
         }
     }
     

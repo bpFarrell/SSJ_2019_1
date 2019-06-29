@@ -47,6 +47,7 @@ public delegate void StateChange(GameState old, GameState now);
 public delegate void CardUse(CardDefinition card);
 public delegate void TurnComplete();
 public class GameManager : MonoBehaviour {
+    public bool isTitleScreen;
     public static float time = 0;
     public float _time;
     public float turnLength = 5f;
@@ -88,6 +89,10 @@ public class GameManager : MonoBehaviour {
     float deathStartTime;
     void Awake() {
         instance = this;
+        if (isTitleScreen) {
+            RandomizeBG(bgRealMat);
+            return;
+        }
         bgRealGo.GetComponent<MeshRenderer>().material = bgRealMat = new Material(bgRealMat);
         bgFakeGo.GetComponent<MeshRenderer>().material = bgFakeMat = new Material(bgFakeMat);
 
@@ -95,7 +100,8 @@ public class GameManager : MonoBehaviour {
         RandomizeBG(bgFakeMat);
     }
     private void Start() {
-        ChangeState(GameState.CARD_SELECT);
+        if (!isTitleScreen)
+            ChangeState(GameState.CARD_SELECT);
         OnStateChange += StateChanged;
     }
     public static void ChangeState(GameState newState) {
@@ -123,8 +129,12 @@ public class GameManager : MonoBehaviour {
         if (panelTransit) {
             PanelTransit();
         }
+        if (Input.GetKeyDown(KeyCode.F12)) {
+            GoToTitle();
+        }
         switch (state) {
             case GameState.TITLE:
+                IsTitle();
                 break;
             case GameState.CARD_SELECT:
                 InCardSelect();
@@ -153,6 +163,16 @@ public class GameManager : MonoBehaviour {
         if(now== GameState.IS_DYING) {
             deathStartTime = time;
             currentDeathTime = 0;
+        }
+    }
+    void IsTitle() {
+        time += Time.deltaTime;
+        Player player = ReInput.players.GetPlayer(0);
+        if (player.GetButtonUp("Start")) {
+            GoToGame();
+        }
+        if (Input.GetKeyDown(KeyCode.F5)) {
+            RandomizeBG(bgRealMat);
         }
     }
     void IsResurecting() {
@@ -191,7 +211,7 @@ public class GameManager : MonoBehaviour {
             TimeDisplay.SetState(TimeDisplayState.NONE);
 
 
-        if (player.GetButton("Start")) {
+        if (player.GetButton("Start")&& isAtEnd) {
             PlayTurn();
         }
     }
@@ -267,7 +287,9 @@ public class GameManager : MonoBehaviour {
         if (OnNewTurn != null)
             OnNewTurn();
     }
-
+    public static void GoToTitle() {
+        Application.LoadLevel("Title");
+    }
     public static int GlobalTimeToTurn(float gt) {
         return Mathf.FloorToInt(gt / instance.turnLength);
     }
@@ -275,5 +297,10 @@ public class GameManager : MonoBehaviour {
         Application.LoadLevel(Application.loadedLevel);
         time = 0;
         ChangeState(GameState.TITLE);
+    }
+    public static void GoToGame() {
+        //TODO change to the main Scene
+        Application.LoadLevel("Main_Brandon");
+        time = 0;
     }
 }

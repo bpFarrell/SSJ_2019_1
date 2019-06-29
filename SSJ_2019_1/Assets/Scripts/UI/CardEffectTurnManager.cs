@@ -122,6 +122,7 @@ public class CardEffectTurnManager {
                 obj.prebirthSpawnTime = spawnTime - Mathf.Epsilon;
                 obj.parentAgeAtBirth = GameManager.instance.player.t;
                 obj.Init(GameManager.instance.player.evaluable, effect);
+                PewParticleLogic.PlacePew(GameManager.instance.player.evaluable, obj.spawnTime, obj.prebirthSpawnTime);
                 timeObjectList.Add(obj);
             }
         }

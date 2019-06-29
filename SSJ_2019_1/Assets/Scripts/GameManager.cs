@@ -90,6 +90,9 @@ public class GameManager : MonoBehaviour {
         instance = this;
         bgRealGo.GetComponent<MeshRenderer>().material = bgRealMat = new Material(bgRealMat);
         bgFakeGo.GetComponent<MeshRenderer>().material = bgFakeMat = new Material(bgFakeMat);
+
+        RandomizeBG(bgRealMat);
+        RandomizeBG(bgFakeMat);
     }
     private void Start() {
         ChangeState(GameState.CARD_SELECT);
@@ -231,23 +234,25 @@ public class GameManager : MonoBehaviour {
         bgFakeMat.SetFloat("_Fade", 0);
         bgRealGo.GetComponent<MeshRenderer>().material = bgRealMat;
         bgFakeGo.GetComponent<MeshRenderer>().material = bgFakeMat;
-        bgFakeMat.SetVector("_Sun", new Vector4(
+        RandomizeBG(bgFakeMat);
+    }
+    public static void RandomizeBG(Material mat) {
+        mat.SetVector("_Sun", new Vector4(
             Random.Range(-1, 1),
             Random.Range(-0.6f, 0.6f),
             Random.Range(6, 40),
             Random.Range(0f, .7f)));
-        bgFakeMat.SetVector("_Grad", new Vector4(
+        mat.SetVector("_Grad", new Vector4(
             Random.Range(0, Mathf.PI * 2),
             /*Random.Range(-0.6f, 0.6f)*/0.1f,
             Random.Range(-.6f, .2f),
             Random.Range(0f, .7f)));
-        bgFakeMat.SetVector("_Pattern", new Vector4(
+        mat.SetVector("_Pattern", new Vector4(
             Random.Range(0, Mathf.PI * 2),
             Random.Range(6, 30),
-            (new int[]{ 0, 2, 3 })[Random.Range(0, 2)],
+            Random.Range(0, 4),
             0));
-        bgFakeMat.SetColor("_Color", Color.HSVToRGB(Random.Range(0f, 1f), 1, 1));
-
+        mat.SetColor("_Color", Color.HSVToRGB(Random.Range(0f, 1f), .7f, .7f));
     }
     private void StartNewTurn() {
         ChangeState(GameState.CARD_SELECT);

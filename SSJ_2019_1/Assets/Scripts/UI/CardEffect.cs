@@ -30,9 +30,9 @@ public class CardEffect{
     public float shotFrequency = 0f;
     public float shotFrequencyScalar = 1f;
     public float shotFrequencyModifier = 0f;
-    public int shotSpread = 0;
+    public float shotSpread = 0;
     public float shotSpreadScalar = 1f;
-    public int shotSpreadModifier = 0;
+    public float shotSpreadModifier = 0;
     public float recieveDamageScalar = 1f;
     public int receiveDamageModifier = 0;
     public ShotType shotType = ShotType.none;
@@ -51,9 +51,9 @@ public class CardEffect{
         shotFrequency = def.json["shotFrequency"].AsFloat;
         shotFrequencyScalar = def.json["shotFrequencyScalar"].AsFloat;
         shotFrequencyModifier = def.json["shotFrequencyModifier"].AsFloat;
-        shotSpread = def.json["shotSpread"].AsInt;
+        shotSpread = def.json["shotSpread"].AsFloat;
         shotSpreadScalar = def.json["shotSpreadScalar"].AsFloat;
-        shotSpreadModifier = def.json["shotSpreadModifier"].AsInt;
+        shotSpreadModifier = def.json["shotSpreadModifier"].AsFloat;
         recieveDamageScalar = def.json["recieveDamageScalar"].AsFloat;
         receiveDamageModifier = def.json["receiveDamageModifier"].AsInt;
     }

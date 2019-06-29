@@ -7,7 +7,7 @@ Material:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: Unlit_BG
+  m_Name: Unlit_BG Fake
   m_Shader: {fileID: 4800000, guid: efc6ff3a9d4796b458de0d9108414297, type: 3}
   m_ShaderKeywords: 
   m_LightmapFlags: 4
@@ -24,10 +24,10 @@ Material:
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     m_Floats:
-    - _Fade: 1
+    - _Fade: 0
     m_Colors:
     - _Center: {r: 0.61, g: 0.31, b: 16.33, a: 0.09}
-    - _Color: {r: 0, g: 0.25424433, b: 1, a: 1}
-    - _Grad: {r: 5.33, g: 0.1, b: -0.47, a: 1.42}
-    - _Pattern: {r: 7.43, g: 30, b: 0.54, a: -0.72}
-    - _Sun: {r: 0, g: 5.22, b: 0, a: 0.7}
+    - _Color: {r: 0.84874165, g: 1, b: 0, a: 1}
+    - _Grad: {r: 16.28, g: 0.05, b: 0.27, a: 1.42}
+    - _Pattern: {r: 6.1, g: 27.12, b: 2, a: 0.66}
+    - _Sun: {r: -0.63, g: -0.14, b: 6.39, a: 0.56}

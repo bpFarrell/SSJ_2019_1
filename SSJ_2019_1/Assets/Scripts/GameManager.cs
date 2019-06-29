@@ -266,4 +266,7 @@ public class GameManager : MonoBehaviour {
         if (OnNewTurn != null)
             OnNewTurn();
     }
+    public static int GlobalTimeToTurn(float gt) {
+        return Mathf.FloorToInt(gt/instance.turnLength);
+    }
 }

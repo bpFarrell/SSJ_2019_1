@@ -33,6 +33,10 @@ public class BulletPool : TimeObject {
         sc.radius = 0.2f;
         sc.center = Vector3.up * 0.1f;
         sc.isTrigger = true;
+        activeItem = new List<BulletPool>();
+        pendingItems = new List<BulletPool>();
+        pooledItems = new List<BulletPool>();
+        spawnCount = 0;
     }
     public static BulletPool GetObject() {
         if (pooledItems.Count == 0) {
@@ -42,6 +46,8 @@ public class BulletPool : TimeObject {
         obj.MarkPolledToActive();
         obj.SetMat(0);
         return obj;
+    }
+    private void OnDisable() {
     }
     public void SetMat(int type) {
         switch (type) {

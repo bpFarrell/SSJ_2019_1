@@ -42,6 +42,7 @@ public class UIManager : UISingletonBehaviour<UIManager>
         movementRef.Cleanup();
         skillRef.Cleanup();
         handRef.Cleanup();
+        _CETurnManager = null;
     }
 
     private void Update() {

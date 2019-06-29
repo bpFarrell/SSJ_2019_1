@@ -23,6 +23,10 @@ public class CardEffectTurnManager {
     public void Cleanup() {
         GameManager.instance.OnTurnComplete -= TurnComplete;
         GameManager.instance.OnNewTurn -= NewTurn;
+        projectileEffects.Clear();
+        playerEffects.Clear();
+        handEffects.Clear();
+        timeObjectList.Clear();
     }
 
     public void Process() {

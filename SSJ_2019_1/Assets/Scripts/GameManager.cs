@@ -238,18 +238,18 @@ public class GameManager : MonoBehaviour {
     }
     public static void RandomizeBG(Material mat) {
         mat.SetVector("_Sun", new Vector4(
-            Random.Range(-1, 1),
+            Random.Range(-1f, 1f),
             Random.Range(-0.6f, 0.6f),
-            Random.Range(6, 40),
+            Random.Range(6f, 40f),
             Random.Range(0f, .7f)));
         mat.SetVector("_Grad", new Vector4(
-            Random.Range(0, Mathf.PI * 2),
+            Random.Range(0f, Mathf.PI * 2),
             /*Random.Range(-0.6f, 0.6f)*/0.1f,
             Random.Range(-.6f, .2f),
             Random.Range(0f, .7f)));
         mat.SetVector("_Pattern", new Vector4(
             Random.Range(0, Mathf.PI * 2),
-            Random.Range(6, 30),
+            Random.Range(6f, 30f),
             Random.Range(0, 4),
             0));
         mat.SetColor("_Color", Color.HSVToRGB(Random.Range(0f, 1f), .7f, .7f));

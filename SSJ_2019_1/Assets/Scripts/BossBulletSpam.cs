@@ -137,8 +137,8 @@ public class BossBulletSpam : TimeObject
         }
     }
     void OnNewTurn() {
-        if(GameManager.instance.turnNumber%3>0)
-            SpawnDangerZone(Rand.GetRange(0,5));
+        //if(GameManager.instance.turnNumber%3>0)
+            //SpawnDangerZone(Rand.GetRange(0,5));
     }
     public void SpawnDangerZone(int type) {
         GameObject go = Instantiate(Resources.Load("DangerZone"))as GameObject;

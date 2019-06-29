@@ -1,18 +1,98 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
---- !u!114 &4168369894975686761
+--- !u!1 &914542512
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 914542513}
+  - component: {fileID: 914542515}
+  - component: {fileID: 914542514}
+  - component: {fileID: 914542516}
+  m_Layer: 0
+  m_Name: Quad
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &914542513
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 914542512}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 9.7}
+  m_LocalScale: {x: 7.6853647, y: 7.6853647, z: 7.6853647}
+  m_Children: []
+  m_Father: {fileID: 4168369896230445520}
+  m_RootOrder: 2
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!33 &914542515
+MeshFilter:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 914542512}
+  m_Mesh: {fileID: 10210, guid: 0000000000000000e000000000000000, type: 0}
+--- !u!23 &914542514
+MeshRenderer:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 914542512}
+  m_Enabled: 0
+  m_CastShadows: 1
+  m_ReceiveShadows: 1
+  m_DynamicOccludee: 1
+  m_MotionVectors: 1
+  m_LightProbeUsage: 1
+  m_ReflectionProbeUsage: 1
+  m_RenderingLayerMask: 1
+  m_RendererPriority: 0
+  m_Materials:
+  - {fileID: 2100000, guid: bda06e3d8b989834eb10b58dfedcd60f, type: 2}
+  m_StaticBatchInfo:
+    firstSubMesh: 0
+    subMeshCount: 0
+  m_StaticBatchRoot: {fileID: 0}
+  m_ProbeAnchor: {fileID: 0}
+  m_LightProbeVolumeOverride: {fileID: 0}
+  m_ScaleInLightmap: 1
+  m_PreserveUVs: 0
+  m_IgnoreNormalsForChartDetection: 0
+  m_ImportantGI: 0
+  m_StitchLightmapSeams: 1
+  m_SelectedEditorRenderState: 3
+  m_MinimumChartSize: 4
+  m_AutoUVMaxDistance: 0.5
+  m_AutoUVMaxAngle: 89
+  m_LightmapParameters: {fileID: 0}
+  m_SortingLayerID: 0
+  m_SortingLayer: 0
+  m_SortingOrder: 0
+--- !u!114 &914542516
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4207334968545304378}
+  m_GameObject: {fileID: 914542512}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 203a11fdf22759c4384c2595b58c15fd, type: 3}
+  m_Script: {fileID: 11500000, guid: 988c08cf46341c54097cf9340b5742bf, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  mat: {fileID: 2100000, guid: 3abc974a412e1f94b8a9d3c77e69c824, type: 2}
+  play: {fileID: 2800000, guid: 2a9f604ffc7c87045b308345c9a472e6, type: 3}
+  rewind: {fileID: 2800000, guid: cb29e3ba66af97b4a8ef09382c62db74, type: 3}
+  end: {fileID: 2800000, guid: 5e1f0bac78981564f865c7412f032a51, type: 3}
 --- !u!1 &4168369896230445527
 GameObject:
   m_ObjectHideFlags: 0
@@ -43,6 +123,7 @@ Transform:
   m_Children:
   - {fileID: 4168369895664616872}
   - {fileID: 4207334968545304383}
+  - {fileID: 914542513}
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -62,6 +143,19 @@ MonoBehaviour:
   frameIndex: 0
   apply: 0
   capture: 1
+--- !u!114 &4168369894975686761
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4207334968545304378}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 203a11fdf22759c4384c2595b58c15fd, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  mat: {fileID: 2100000, guid: 3abc974a412e1f94b8a9d3c77e69c824, type: 2}
 --- !u!1001 &4168369895303483901
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -151,16 +245,6 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 268653062645075653, guid: 3e622a32c14bf3745af2179d83be0530,
         type: 3}
-      propertyPath: m_RenderingPath
-      value: -1
-      objectReference: {fileID: 0}
-    - target: {fileID: 268653062645075653, guid: 3e622a32c14bf3745af2179d83be0530,
-        type: 3}
-      propertyPath: m_CullingMask.m_Bits
-      value: 16
-      objectReference: {fileID: 0}
-    - target: {fileID: 268653062645075653, guid: 3e622a32c14bf3745af2179d83be0530,
-        type: 3}
       propertyPath: m_BackGroundColor.a
       value: 1
       objectReference: {fileID: 0}
@@ -169,13 +253,12 @@ PrefabInstance:
       propertyPath: m_Depth
       value: -0.61
       objectReference: {fileID: 0}
-    - target: {fileID: 268653062645075651, guid: 3e622a32c14bf3745af2179d83be0530,
+    - target: {fileID: 268653062645075653, guid: 3e622a32c14bf3745af2179d83be0530,
         type: 3}
-      propertyPath: m_Enabled
-      value: 0
+      propertyPath: m_CullingMask.m_Bits
+      value: 16
       objectReference: {fileID: 0}
-    m_RemovedComponents:
-    - {fileID: 268653062645075651, guid: 3e622a32c14bf3745af2179d83be0530, type: 3}
+    m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 3e622a32c14bf3745af2179d83be0530, type: 3}
 --- !u!1 &4207334968545304378 stripped
 GameObject:
@@ -256,11 +339,16 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 268653062645075653, guid: 3e622a32c14bf3745af2179d83be0530,
+    - target: {fileID: 268653062645075651, guid: 3e622a32c14bf3745af2179d83be0530,
         type: 3}
-      propertyPath: m_ClearFlags
-      value: 1
-      objectReference: {fileID: 0}
+      propertyPath: multiply
+      value: 
+      objectReference: {fileID: 2100000, guid: 598187f6c12ab924bbf4916d5ccd85a5, type: 2}
+    - target: {fileID: 268653062645075651, guid: 3e622a32c14bf3745af2179d83be0530,
+        type: 3}
+      propertyPath: panel
+      value: 
+      objectReference: {fileID: 2100000, guid: c80ededf70d44e14e88896ac6cd3869f, type: 2}
     - target: {fileID: 268653062645075653, guid: 3e622a32c14bf3745af2179d83be0530,
         type: 3}
       propertyPath: m_BackGroundColor.r
@@ -278,24 +366,9 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 268653062645075653, guid: 3e622a32c14bf3745af2179d83be0530,
         type: 3}
-      propertyPath: m_RenderingPath
-      value: -1
-      objectReference: {fileID: 0}
-    - target: {fileID: 268653062645075653, guid: 3e622a32c14bf3745af2179d83be0530,
-        type: 3}
-      propertyPath: m_BackGroundColor.a
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 268653062645075653, guid: 3e622a32c14bf3745af2179d83be0530,
-        type: 3}
       propertyPath: m_CullingMask.m_Bits
       value: 3879
       objectReference: {fileID: 0}
-    - target: {fileID: 268653062645075651, guid: 3e622a32c14bf3745af2179d83be0530,
-        type: 3}
-      propertyPath: multiply
-      value: 
-      objectReference: {fileID: 2100000, guid: 598187f6c12ab924bbf4916d5ccd85a5, type: 2}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 3e622a32c14bf3745af2179d83be0530, type: 3}
 --- !u!4 &4168369895664616872 stripped

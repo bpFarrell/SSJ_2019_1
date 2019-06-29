@@ -6,6 +6,7 @@ public class BossBulletSpam : TimeObject
 {
     float lastSpawn;
     float spawnRate = 2;
+    float lastHitAt=-1;
     public int hp = 20;
     public Vector3 startPos;
     public float mag=1;
@@ -104,10 +105,14 @@ public class BossBulletSpam : TimeObject
         renderObjects.SetActive(true);
     }
     private void CheckDamageRewind() {
+        Shader.SetGlobalFloat("_BossHurt", 1-Mathf.Clamp01(((GameManager.time - lastHitAt) * 8)));
         if (damageStack.Count == 0) return;
         if (GameManager.time < damageStack.Peek().Key) {
             hp += (int)damageStack.Pop().Value;
-
+            if (damageStack.Count == 0)
+                lastHitAt = -1;
+            else
+                lastHitAt = damageStack.Peek().Key;
             nextDeadTent--;
             tentColor[nextDeadTent].SetActive(true);
             tentDepth[nextDeadTent].SetActive(true);
@@ -121,6 +126,7 @@ public class BossBulletSpam : TimeObject
         tentColor[nextDeadTent].SetActive(false);
         tentDepth[nextDeadTent].SetActive(false);
         nextDeadTent++;
+        lastHitAt = GameManager.time;
         damageStack.Push(new KeyValuePair<float, float>(GameManager.time, 1));
         if (hp <= 0) {
             Debug.Log("Killed the boss!");

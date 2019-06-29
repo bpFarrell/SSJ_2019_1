@@ -4,6 +4,7 @@
     {
 		_MainTex("Texture", 2D) = "white" {}
 		_Normal("Normal", 2D) = "normal" {}
+		_Detail("Detail", 2D) = "black" {}
     }
     SubShader
     {
@@ -47,6 +48,8 @@ Tags { "Queue" = "Transparent" "RenderType" = "Transparent" "IgnoreProjector" = 
             sampler2D _MainTex;
             float4 _MainTex_ST;
 			sampler2D _Normal;
+			sampler2D _Detail;
+			float _BossHurt;
 			//float _T;
 			v2f vert(appdata v,float4 vertex : POSITION, float3 normal : NORMAL, float4 tangent : TANGENT, float2 uv : TEXCOORD0)
 			{
@@ -98,6 +101,7 @@ Tags { "Queue" = "Transparent" "RenderType" = "Transparent" "IgnoreProjector" = 
 #else
 			col = fixed4(.8, i.worldPos.z, .5, 1);
 			col = tex2D(_MainTex, i.uv);
+			col += fixed4(1,.8,.8,1)*smoothstep(0.2,0.5,pow(tex2D(_Detail, i.uv),2))*_BossHurt*10;
 #endif
 
 			return col;

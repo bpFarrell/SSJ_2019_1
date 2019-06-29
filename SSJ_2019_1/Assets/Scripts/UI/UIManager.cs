@@ -50,4 +50,28 @@ public class UIManager : UISingletonBehaviour<UIManager>
         skillRef.Process();
         handRef.Process();
     }
+
+    public int shotCount = 1;
+    public float shotSpread = 15f;
+    private void OnDrawGizmos()
+    {
+        Gizmos.color = Color.red;
+        float angleStart = -shotSpread;
+        float totalAngle = shotSpread*2;
+        float angleIncrement = totalAngle/(shotCount-1);
+        int extraShots;
+        for (int i = 0; i < shotCount; i++) {
+            Vector3 dir;
+            if (shotCount > 1) {
+                float angle = angleStart + (angleIncrement * i);
+                dir = new Vector3(
+                    Mathf.Cos(Mathf.Deg2Rad * angle),
+                    -Mathf.Sin(Mathf.Deg2Rad * angle),
+                    0);
+            } else {
+                dir = Vector3.right;
+            }
+            Gizmos.DrawLine(Vector3.zero, dir);
+        }
+    }
 }

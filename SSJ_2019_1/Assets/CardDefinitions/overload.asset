@@ -19,7 +19,6 @@ MonoBehaviour:
     count</b>.
   _flavor: 
   _assetName: overload
-  _projectilePrefab: {fileID: 8773706794364134306, guid: c2a5e6b0138f025458d0ebc395854f13,
-    type: 3}
+  _projectilePrefab: {fileID: 0}
   jsonString: '{"name":"Overload","type":"P","class":"Buff","cost":1,"description":"Only
-    play <b>Power</b> cards for the next 2 turns, but double <b>projectile count</b>.","resourceName":"overload","cardType":"hand","duration":1,"shotCount":0,"shotCountScalar":2,"shotCountModifier":0,"shotFrequency":0,"shotFrequencyScalar":0,"shotFrequencyModifier":0,"shotSpread":0,"shotSpreadScalar":0,"shotSpreadModifier":0}'
+    play <b>Power</b> cards for the next 2 turns, but double <b>projectile count</b>.","resourceName":"overload","cardType":"hand","duration":1,"projectileSpeed":1,"shotCount":0,"shotCountScalar":2,"shotCountModifier":0,"shotFrequency":0,"shotFrequencyScalar":0,"shotFrequencyModifier":0,"shotSpread":0,"shotSpreadScalar":0,"shotSpreadModifier":0}'

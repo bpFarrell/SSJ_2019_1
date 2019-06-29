@@ -3,6 +3,8 @@
 public class CardTimeObject : TimeObject {
     public CardEffect effect;
 
+    public const float BASESHOTSPEEDSCALE = 6f;
+
     public MeshRenderer mr;
     public Collider col;
     public bool isBeforeBirth;
@@ -10,7 +12,7 @@ public class CardTimeObject : TimeObject {
     public void Init(IEvaluable parent, CardEffect effect) {
         Load(effect);
         evaluable = new IEvaluable();
-        evaluable.eval = (t) => { return parent.eval(spawnTime) + dir * t; };
+        evaluable.eval = (t) => { return parent.eval(spawnTime) + dir * (effect.shotSpeed * BASESHOTSPEEDSCALE) * t; };
         RotateThatBitch();
         if (t < 0) {
             Show(false);

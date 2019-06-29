@@ -15,9 +15,12 @@ MonoBehaviour:
   _name: Pulse
   _cost: 4
   _type: 2
+  _cClass: 0
+  _cardType: 0
   _description: Clears the screen of ALL projectiles.
   _flavor: 
   _assetName: pulse
-  _projectilePrefab: {fileID: 0}
+  _projectilePrefab: {fileID: 490960442616065792, guid: c2a5e6b0138f025458d0ebc395854f13,
+    type: 3}
   jsonString: '{"name":"Pulse","type":"U","class":"Attack","cost":4,"description":"Clears
-    the screen of ALL projectiles.","resourceName":"pulse","cardType":"projectile","duration":0,"projectileSpeed":2,"shotCount":1,"shotCountScalar":1,"shotCountModifier":1,"shotFrequency":1,"shotFrequencyScalar":1,"shotFrequencyModifier":1,"shotSpread":1,"shotSpreadScalar":1,"shotSpreadModifier":1,"shotType":"explosive","recieveDamageScalar":"."}'
+    the screen of ALL projectiles.","resourceName":"pulse","cardType":"projectile","duration":0,"projectileSpeed":2,"projectileSpeedScalar":1,"shotCount":1,"shotCountScalar":1,"shotFrequency":1,"shotFrequencyScalar":1,"shotSpread":1,"shotSpreadScalar":1,"shotType":"explosive","recieveDamageScalar":"."}'

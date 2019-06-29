@@ -18,6 +18,8 @@ public class CardEffectTurnManager {
     public void Init() {
         GameManager.instance.OnTurnComplete += TurnComplete;
         GameManager.instance.OnNewTurn += NewTurn;
+        playerEffects.Add(new List<CardEffect>());
+        handEffects.Add(new List<CardEffect>());
     }
 
     public void Cleanup() {
@@ -48,36 +50,77 @@ public class CardEffectTurnManager {
             }
             if (projectileEffects[i].Key != lastEvaluated) continue;
 
-            EffectToTimeObject(projectileEffects[i].Key, projectileEffects[i].Value);
+            if (projectileEffects[i].Value.def.cClass == CardDefinition.CLASS.ATTACK) {
+                EffectToTimeObject(projectileEffects[i].Key, projectileEffects[i].Value);
+            }
+            if (projectileEffects[i].Value.def.cClass == CardDefinition.CLASS.PET)
+            {
+                EffectToPetTimeObject(projectileEffects[i].Key, projectileEffects[i].Value);
+            }
         }
     }
 
-    public void EffectToTimeObject(float spawnTime, CardEffect effect) {
-        int length = (int)effect.shotFrequency * effect.def.cost;
-        float freqIncrement = (float)effect.def.cost / (float)length;
-        for (int r = 0; r < length; r++) {
-            float freqDelta =  (freqIncrement * r) * UISkillBar.tabTimeIncrement;
+    private void EffectToPetTimeObject(float spawnTime, CardEffect effect) {
+        CardTimeObject obj = GameObject.Instantiate<CardTimeObject>(effect.def.projectilePrefab, GameManager.instance.transform);
 
-            float angleStart = -effect.shotSpread;
-            float totalAngle = effect.shotSpread * 2;
-            float angleIncrement = totalAngle / (effect.shotCount - 1);
+        obj.scheduledDeathTime = effect.duration * GameManager.instance.turnLength;
+        obj.spawnTime = spawnTime;
+        obj.prebirthSpawnTime = spawnTime - Mathf.Epsilon;
+        obj.parentAgeAtBirth = GameManager.instance.player.t;
+        obj.Init(GameManager.instance.player.evaluable, effect);
+        timeObjectList.Add(obj);
+    }
+
+    public void EffectToTimeObject(float spawnTime, CardEffect effect) {
+        List<CardEffect> effectStack = handEffects[GameManager.GlobalTimeToTurn(spawnTime)];
+        float shotSpeed = effect.shotSpeed;
+        float shotFrequency = effect.shotFrequency;
+        int shotCount = effect.shotCount;
+        float shotSpread = effect.shotSpread;
+        
+        for (int i = 0; i < effectStack.Count; i++) {
+            //shotSpeed += effectStack[i].shotSpeed
+            shotFrequency += effectStack[i].shotFrequencyModifier;
+            shotCount += effectStack[i].shotCountModifier;
+            shotSpread += effectStack[i].shotSpreadModifier;
+        }
+        for (int i = 0; i < effectStack.Count; i++) {
+            //shotSpeed += effectStack[i].shotSpeed
+            shotFrequency *= effectStack[i].shotFrequencyScalar;
+            shotCount = (int)((float)shotCount * effectStack[i].shotCountScalar);
+            shotSpread *= effectStack[i].shotSpreadScalar;
+        }
+
+        int length = (int)shotFrequency * effect.def.cost;
+        float freqIncrement = (float)effect.def.cost / (float)length;
+        for (int r = 0; r < length; r++)
+        {
+            float freqDelta = (freqIncrement * r) * UISkillBar.tabTimeIncrement;
+
+            float angleStart = -shotSpread;
+            float totalAngle = shotSpread * 2;
+            float angleIncrement = totalAngle / (shotCount - 1);
             for (int i = 0; i < effect.shotCount; i++)
             {
                 CardTimeObject obj = GameObject.Instantiate<CardTimeObject>(effect.def.projectilePrefab, GameManager.instance.transform);
 
-                if (effect.shotCount > 1) {
+                if (shotCount > 1)
+                {
                     float angle = angleStart + (angleIncrement * i);
                     obj.dir = new Vector3(
                         Mathf.Cos(Mathf.Deg2Rad * angle),
                         -Mathf.Sin(Mathf.Deg2Rad * angle),
                         0);
-                } else {
+                }
+                else
+                {
                     obj.dir = Vector3.right;
                 }
 
-                obj.scheduledDeathTime = 5f;
+                obj.scheduledDeathTime = effect.duration * GameManager.instance.turnLength;
                 obj.spawnTime = freqDelta + spawnTime + ((float)i) * 0.05f;
-                obj.prebirthSpawnTime = spawnTime + Mathf.Epsilon;
+                obj.prebirthSpawnTime = spawnTime - Mathf.Epsilon;
+                obj.parentAgeAtBirth = GameManager.instance.player.t;
                 obj.Init(GameManager.instance.player.evaluable, effect);
                 timeObjectList.Add(obj);
             }
@@ -93,7 +136,8 @@ public class CardEffectTurnManager {
     }
 
     private void NewTurn() {
-        
+        playerEffects.Add(new List<CardEffect>());
+        handEffects.Add(new List<CardEffect>());
     }
 
     public void TurnComplete() {
@@ -101,28 +145,91 @@ public class CardEffectTurnManager {
     }
 
     internal void AddEffect(float v, CardEffect effect) {
-        projectileEffects.Add(new KeyValuePair<float, CardEffect>(v, effect));
-        EffectToTimeObject(v, effect);
+        switch (effect.def.cardType) {
+            case CardDefinition.CARDTYPE.PROJECTILE:
+                projectileEffects.Add(new KeyValuePair<float, CardEffect>(v, effect));
+                //if (effect.def.cClass == CardDefinition.CLASS.ATTACK)
+                //{
+                //    EffectToTimeObject(v, effect);
+                //}
+                //if (effect.def.cClass == CardDefinition.CLASS.PET)
+                //{
+                //    EffectToPetTimeObject(v, effect);
+                //}
+                break;
+            case CardDefinition.CARDTYPE.HAND:
+                handEffects[GameManager.GlobalTimeToTurn(v)].Add(effect);
+                break;
+            case CardDefinition.CARDTYPE.PLAYER:
+                playerEffects[GameManager.GlobalTimeToTurn(v)].Add(effect);
+                break;
+            default:
+                break;
+        }
     }
     internal void RemoveEffect(CardDefinition def) {
-        for (int i = projectileEffects.Count - 1; i >= 0; i--) {
-            if (projectileEffects[i].Value == null) {
+        switch (def.cardType) {
+            case CardDefinition.CARDTYPE.PROJECTILE:
+                RemoveProjectile(def);
+                break;
+            case CardDefinition.CARDTYPE.HAND:
+                RemoveHandBuff(def);
+                break;
+            case CardDefinition.CARDTYPE.PLAYER:
+                RemovePlayerBuff(def);
+                break;
+            default:
+                break;
+        }
+    }
+
+    private void RemovePlayerBuff(CardDefinition def)
+    {
+        for (int turn = playerEffects.Count - 1; turn >= 0; turn--) {
+            for (int index = playerEffects[turn].Count - 1; index >= 0; index--) {
+                if (playerEffects[turn][index] == null || playerEffects[turn][index].def == def)
+                {
+                    playerEffects[turn].RemoveAt(index);
+                    continue;
+                }
+            }
+        }
+    }
+
+    private void RemoveHandBuff(CardDefinition def)
+    {
+        for (int turn = handEffects.Count - 1; turn >= 0; turn--) {
+            for (int index = handEffects[turn].Count - 1; index >= 0; index--) {
+                if(handEffects[turn][index] == null || handEffects[turn][index].def == def) {
+                    handEffects[turn].RemoveAt(index);
+                    continue;
+                }
+            }
+        }
+    }
+
+    internal void RemoveProjectile(CardDefinition def) {
+        for (int i = projectileEffects.Count - 1; i >= 0; i--)
+        {
+            if (projectileEffects[i].Value == null)
+            {
                 projectileEffects.RemoveAt(i);
                 continue;
             }
             if (projectileEffects[i].Value.def != def) continue;
 
-            for (int obj = timeObjectList.Count - 1; obj >= 0; obj--) {
-                if(timeObjectList[obj] == null) {
+            for (int obj = timeObjectList.Count - 1; obj >= 0; obj--)
+            {
+                if (timeObjectList[obj] == null)
+                {
                     timeObjectList.RemoveAt(obj);
                     continue;
                 }
-                if(timeObjectList[obj].effect == projectileEffects[i].Value)
-                timeObjectList[obj].TotalCleanup();
+                if (timeObjectList[obj].effect == projectileEffects[i].Value)
+                    timeObjectList[obj].TotalCleanup();
             }
 
             projectileEffects.RemoveAt(i);
         }
     }
-    
 }

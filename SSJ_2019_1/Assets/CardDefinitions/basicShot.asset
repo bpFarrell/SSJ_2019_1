@@ -15,9 +15,12 @@ MonoBehaviour:
   _name: Basic shot
   _cost: 1
   _type: 0
+  _cClass: 0
+  _cardType: 0
   _description: Shoots a string of projectile in a straight line.
   _flavor: 
   _assetName: basicShot
-  _projectilePrefab: {fileID: 0}
+  _projectilePrefab: {fileID: 490960442616065792, guid: c2a5e6b0138f025458d0ebc395854f13,
+    type: 3}
   jsonString: '{"name":"Basic shot","type":"P","class":"Attack","cost":1,"description":"Shoots
-    a string of projectile in a straight line.","resourceName":"basicShot","cardType":"projectile","duration":0,"projectileSpeed":2,"shotCount":1,"shotCountScalar":1,"shotCountModifier":0,"shotFrequency":3,"shotFrequencyScalar":1,"shotFrequencyModifier":0,"shotSpread":5,"shotSpreadScalar":1,"shotSpreadModifier":0,"shotType":"simple"}'
+    a string of projectile in a straight line.","resourceName":"basicShot","cardType":"projectile","duration":0,"projectileSpeed":2,"projectileSpeedScalar":1,"shotCount":1,"shotCountScalar":1,"shotFrequency":3,"shotFrequencyScalar":1,"shotSpread":5,"shotSpreadScalar":1,"shotType":"simple"}'

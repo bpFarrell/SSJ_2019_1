@@ -15,9 +15,12 @@ MonoBehaviour:
   _name: Bomb
   _cost: 2
   _type: 0
+  _cClass: 0
+  _cardType: 0
   _description: It go boom.
   _flavor: 
   _assetName: bomb
-  _projectilePrefab: {fileID: 0}
+  _projectilePrefab: {fileID: 490960442616065792, guid: c2a5e6b0138f025458d0ebc395854f13,
+    type: 3}
   jsonString: '{"name":"Bomb","type":"P","class":"Attack","cost":2,"description":"It
-    go boom.","resourceName":"bomb","cardType":"projectile","duration":4,"projectileSpeed":1,"shotCount":1,"shotCountScalar":1,"shotCountModifier":0,"shotFrequency":1,"shotFrequencyScalar":1,"shotFrequencyModifier":0,"shotSpread":0,"shotSpreadScalar":1,"shotSpreadModifier":0,"shotType":"explosive"}'
+    go boom.","resourceName":"bomb","cardType":"projectile","duration":4,"projectileSpeed":1,"projectileSpeedScalar":1,"shotCount":1,"shotCountScalar":1,"shotFrequency":1,"shotFrequencyScalar":1,"shotSpread":0,"shotSpreadScalar":1,"shotType":"explosive"}'

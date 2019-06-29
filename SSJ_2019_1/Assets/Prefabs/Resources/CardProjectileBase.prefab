@@ -9,7 +9,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1143683129417665336}
-  - component: {fileID: 8773706794364134306}
+  - component: {fileID: 490960442616065792}
   - component: {fileID: 6805777534916966574}
   m_Layer: 11
   m_Name: CardProjectileBase
@@ -33,7 +33,7 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &8773706794364134306
+--- !u!114 &490960442616065792
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -42,11 +42,12 @@ MonoBehaviour:
   m_GameObject: {fileID: 1143683129417665337}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 54bea2bd6da537a44afd08334bc2b5bd, type: 3}
+  m_Script: {fileID: 11500000, guid: 275dffcea95fc92478fa5f25c04fb3ee, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  dir: {x: 1, y: 0, z: 0}
+  dir: {x: 0, y: 0, z: 0}
   dead: 0
+  isBeforeBirth: 0
   mr: {fileID: 8686123026871765829}
   col: {fileID: 6805777534916966574}
 --- !u!65 &6805777534916966574

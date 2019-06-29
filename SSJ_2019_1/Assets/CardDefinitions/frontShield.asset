@@ -15,9 +15,12 @@ MonoBehaviour:
   _name: Front Shield
   _cost: 3
   _type: 2
+  _cClass: 2
+  _cardType: 0
   _description: (ally) Spawn a shield that follows infront of you.
   _flavor: 
   _assetName: frontShield
-  _projectilePrefab: {fileID: 0}
+  _projectilePrefab: {fileID: -7311465938549729787, guid: f1d0b1fbba30fca45a5752272e496432,
+    type: 3}
   jsonString: '{"name":"Front Shield","type":"U","class":"Pet","cost":3,"description":"(ally)
-    Spawn a shield that follows infront of you.","resourceName":"frontShield","cardType":"projectile","duration":3,"projectileSpeed":1,"shotCount":0,"shotCountScalar":0,"shotCountModifier":0,"shotFrequency":0,"shotFrequencyScalar":0,"shotFrequencyModifier":0,"shotSpread":0,"shotSpreadScalar":0,"shotSpreadModifier":0}'
+    Spawn a shield that follows infront of you.","resourceName":"frontShield","cardType":"projectile","duration":3,"projectileSpeed":1,"projectileSpeedScalar":1,"shotCount":1,"shotCountScalar":1,"shotFrequency":1,"shotFrequencyScalar":1,"shotSpread":0,"shotSpreadScalar":1,"shotType":"simple"}'

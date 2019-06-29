@@ -15,9 +15,12 @@ MonoBehaviour:
   _name: Tight cone
   _cost: 2
   _type: 0
+  _cClass: 0
+  _cardType: 0
   _description: Shoots several bursts of projectiles in a tight arc.
   _flavor: 
   _assetName: tightCone
-  _projectilePrefab: {fileID: 0}
+  _projectilePrefab: {fileID: 490960442616065792, guid: c2a5e6b0138f025458d0ebc395854f13,
+    type: 3}
   jsonString: '{"name":"Tight cone","type":"P","class":"Attack","cost":2,"description":"Shoots
-    several bursts of projectiles in a tight arc.","resourceName":"tightCone","cardType":"projectile","duration":0,"projectileSpeed":2,"shotCount":3,"shotCountScalar":1,"shotCountModifier":0,"shotFrequency":2,"shotFrequencyScalar":1,"shotFrequencyModifier":0,"shotSpread":10,"shotSpreadScalar":1,"shotSpreadModifier":0,"shotType":"simple"}'
+    several bursts of projectiles in a tight arc.","resourceName":"tightCone","cardType":"projectile","duration":0,"projectileSpeed":2,"projectileSpeedScalar":1,"shotCount":3,"shotCountScalar":1,"shotFrequency":2,"shotFrequencyScalar":1,"shotSpread":10,"shotSpreadScalar":1,"shotType":"simple"}'

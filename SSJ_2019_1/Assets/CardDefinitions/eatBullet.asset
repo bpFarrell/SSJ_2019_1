@@ -15,9 +15,12 @@ MonoBehaviour:
   _name: Eat Bullet
   _cost: 2
   _type: 2
+  _cClass: 1
+  _cardType: 2
   _description: <b>Absorbs</b> bullets, increase stat.
   _flavor: 
   _assetName: eatBullet
-  _projectilePrefab: {fileID: 0}
+  _projectilePrefab: {fileID: 490960442616065792, guid: c2a5e6b0138f025458d0ebc395854f13,
+    type: 3}
   jsonString: '{"name":"Eat Bullet","type":"U","class":"Buff","cost":2,"description":"<b>Absorbs</b>
-    bullets, increase stat.","resourceName":"eatBullet","cardType":"player","duration":1,"projectileSpeed":1,"shotCount":0,"shotCountScalar":0,"shotCountModifier":0,"shotFrequency":0,"shotFrequencyScalar":0,"shotFrequencyModifier":0,"shotSpread":0,"shotSpreadScalar":0,"shotSpreadModifier":0}'
+    bullets, increase stat.","resourceName":"eatBullet","cardType":"player","duration":1,"projectileSpeed":1,"projectileSpeedScalar":1,"shotCount":0,"shotCountScalar":0,"shotFrequency":0,"shotFrequencyScalar":0,"shotSpread":0,"shotSpreadScalar":0}'

@@ -258,7 +258,8 @@ PrefabInstance:
       propertyPath: m_CullingMask.m_Bits
       value: 16
       objectReference: {fileID: 0}
-    m_RemovedComponents: []
+    m_RemovedComponents:
+    - {fileID: 268653062645075651, guid: 3e622a32c14bf3745af2179d83be0530, type: 3}
   m_SourcePrefab: {fileID: 100100000, guid: 3e622a32c14bf3745af2179d83be0530, type: 3}
 --- !u!1 &4207334968545304378 stripped
 GameObject:

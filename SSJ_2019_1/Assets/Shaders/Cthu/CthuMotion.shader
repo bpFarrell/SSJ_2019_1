@@ -5,6 +5,7 @@
 		_MainTex("Texture", 2D) = "white" {}
 		_Normal("Normal", 2D) = "normal" {}
 		_Detail("Detail", 2D) = "black" {}
+		_Offsets("Offsets",Vector) = (0,0,0,0)
     }
     SubShader
     {
@@ -50,12 +51,13 @@ Tags { "Queue" = "Transparent" "RenderType" = "Transparent" "IgnoreProjector" = 
 			sampler2D _Normal;
 			sampler2D _Detail;
 			float _BossHurt;
+			float4 _Offsets;
 			//float _T;
 			v2f vert(appdata v,float4 vertex : POSITION, float3 normal : NORMAL, float4 tangent : TANGENT, float2 uv : TEXCOORD0)
 			{
                 v2f o;
 #if IS_TENTS
-				v.vertex = CthulTent(v.vertex, v.uv, v.uv2);
+				v.vertex = CthulTent(v.vertex, v.uv, v.uv2+_Offsets.x);
 #else
 				v.vertex = CthulMain(v.vertex);
 #endif

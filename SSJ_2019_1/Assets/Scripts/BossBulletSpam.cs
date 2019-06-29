@@ -17,7 +17,10 @@ public class BossBulletSpam : TimeObject
     Stack<KeyValuePair<float, float>> damageStack = new Stack<KeyValuePair<float, float>>();
     public MeshRenderer[] tentColor;
     public MeshRenderer[] tentDepth;
+    public Material[] headMats;
     int nextDeadTent;
+    public bool isdying;
+    public float timeOfDeath;
     float percentHP {
         get { return ((float)hp) / ((float)maxHP); }
     }
@@ -45,12 +48,20 @@ public class BossBulletSpam : TimeObject
             tentColor[x].material = new Material(tentColor[x].material);
             tentDepth[x].material = new Material(tentDepth[x].material);
         }
+
+        for (int x = 0; x < headMats.Length; x++) {
+            headMats[x].SetFloat("_Decay", 9999);
+        }
+
     }
 
     // Update is called once per frame
     void Update()
     {
-
+        if (isdying) {
+            IsDying();
+            return;
+        }
         TimeUpdate();
         CheckDamageRewind();
         if (dead) return;
@@ -64,6 +75,13 @@ public class BossBulletSpam : TimeObject
             //Simple();
             Volley();
             WaveSpawn();
+        }
+    }
+    void IsDying() {
+        transform.position -= new Vector3(1, 2, 1f)*Time.deltaTime;
+        transform.Rotate(new Vector3(20, -17, 8) * Time.deltaTime);
+        if (GameManager.time > timeOfDeath + 8) {
+            GameManager.ResetLevel();
         }
     }
     public void Simple() {
@@ -157,10 +175,16 @@ public class BossBulletSpam : TimeObject
         damageStack.Push(new KeyValuePair<float, float>(GameManager.time, 1));
         if (hp <= 0) {
             Debug.Log("Killed the boss!");
-            if(GameManager.instance.state== GameState.SIMULATE_PLAY)
+            if (GameManager.instance.state == GameState.SIMULATE_PLAY) {
                 GameManager.ChangeState(GameState.END);
+                isdying = true;
+                for (int x = 0; x < headMats.Length; x++) {
+                    headMats[x].SetFloat("_Decay", GameManager.time+1);
+                }
+                timeOfDeath = GameManager.time;
+            }
             Kill(GameManager.time);
-            renderObjects.SetActive(false);
+            //renderObjects.SetActive(false);
         }
     }
     void OnNewTurn() {

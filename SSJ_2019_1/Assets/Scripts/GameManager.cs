@@ -138,6 +138,7 @@ public class GameManager : MonoBehaviour {
             case GameState.PLAY:
                 break;
             case GameState.END:
+                time += Time.deltaTime;
                 break;
             case GameState.CREDITS:
                 break;
@@ -265,5 +266,10 @@ public class GameManager : MonoBehaviour {
             OnTurnComplete();
         if (OnNewTurn != null)
             OnNewTurn();
+    }
+    public static void ResetLevel() {
+        Application.LoadLevel(Application.loadedLevel);
+        time = 0;
+        ChangeState(GameState.TITLE);
     }
 }

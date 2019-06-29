@@ -2,10 +2,13 @@
 {
     Properties
     {
-        _MainTex ("Texture", 2D) = "white" {}
+		_MainTex("Texture", 2D) = "white" {}
+		_Tex("Tex", 2D) = "white" {}
 		_Color("Color",color) = (1,1,1,1)
 		_Sun("Sun",Vector) = (0,0,0,0)
 		_Grad("Grad",Vector)=(0,0,0,0)
+		_Pattern("Patten",Vector)=(10,0,0,0)
+		_Fade("Fade",Float) = 1
     }
     SubShader
     {
@@ -35,11 +38,14 @@
                 float4 vertex : SV_POSITION;
             };
 
-            sampler2D _MainTex;
-            float4 _MainTex_ST;
+			sampler2D _MainTex;
+			sampler2D _Tex;
+			float4 _MainTex_ST;
 			float _T;
 			float4 _Sun;
 			float4 _Grad;
+			float4 _Pattern;
+			float _Fade;
 			fixed4 _Color;
             v2f vert (appdata v)
             {
@@ -52,15 +58,26 @@
 
 			fixed4 frag(v2f i) : SV_Target
 			{
+				if (-i.uv.x < -_Fade)
+					discard;
 				fixed3 col2 = rgb2hsv(_Color);
 				col2.x -= 0.1;
 				col2.yz *= 0.7;
 				col2 = hsv2rgb(col2);
 				float2 uv = i.uv * 2 - 1;
-				float2x2 rotMat = float2x2(cos(_Grad.x), -sin(_Grad.x),sin(_Grad.x), cos(_Grad.x) );
+
+				float2x2 rotMatPattern = float2x2(
+					cos(_Pattern.x), -sin(_Pattern.x), 
+					sin(_Pattern.x), cos(_Pattern.x));
+				fixed3 pattern = tex2D(_Tex, mul(rotMatPattern,uv*_Pattern.y)).rgb;
+				//return fixed4(1,1,1,1)*smoothstep(_Pattern.w, _Pattern.w, pattern[floor(_Pattern.z)]);
+				//return pattern.xyzz;
+
+				float rot = _Grad.x + _T*0.1;
+				float2x2 rotMat = float2x2(cos(rot), -sin(rot),sin(rot), cos(rot) );
 				float2 uvRot = mul(rotMat, uv);
 
-				float finalGrad = smoothstep(-_Grad.y, _Grad.y, uvRot.y);
+				float finalGrad = smoothstep(-_Grad.y, _Grad.y, (uvRot.y+_Grad.z+pattern[_Pattern.z])*0.5);
 				//return lerp(_Color, col2.rgbb,finalGrad);
 
 

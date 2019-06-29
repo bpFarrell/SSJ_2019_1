@@ -162,16 +162,24 @@ public class GameManager : MonoBehaviour {
     void PlayTurn() {
         ChangeState(GameState.SIMULATE_PLAY);
         //time = turnStartTime;
-
+        TimeDisplay.SetState(TimeDisplayState.REWIND);
         isRewindingForSimulation = true;
     }
     private void InCardSelect() {
+        float turnBeginTime = (turnNumber - 1) * turnLength;
+        float turnEndTime = turnNumber * turnLength;
+        bool isAtEnd = time == turnEndTime;
         Player player = ReInput.players.GetPlayer(0);
         float rewind = player.GetAxis("Rewind");
         float fastf = player.GetAxis("Fastforward");
         time += Mathf.Pow(fastf, 4) * Time.deltaTime * 5;
         time -= Mathf.Pow(rewind, 4) * Time.deltaTime * 5;
-        time = Mathf.Clamp(time, (turnNumber - 1) * turnLength, turnNumber * turnLength);
+        time = Mathf.Clamp(time, turnBeginTime, turnEndTime);
+        if (time == turnEndTime && !isAtEnd)
+            TimeDisplay.SetState(TimeDisplayState.END);
+        else if (time != turnEndTime && isAtEnd)
+            TimeDisplay.SetState(TimeDisplayState.NONE);
+
 
         if (player.GetButton("Start")) {
             PlayTurn();
@@ -185,6 +193,8 @@ public class GameManager : MonoBehaviour {
             if (tempTime < turnStartTime) {
                 time = turnStartTime;
                 isRewindingForSimulation = false;
+
+                TimeDisplay.SetState(TimeDisplayState.NONE);
             } else {
                 time = tempTime;
             }

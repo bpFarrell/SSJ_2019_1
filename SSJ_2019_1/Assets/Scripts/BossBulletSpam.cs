@@ -81,7 +81,7 @@ public class BossBulletSpam : TimeObject
         transform.position -= new Vector3(1, 2, 1f)*Time.deltaTime;
         transform.Rotate(new Vector3(20, -17, 8) * Time.deltaTime);
         if (GameManager.time > timeOfDeath + 8) {
-            GameManager.ResetLevel();
+            GameManager.GoToTitle();
         }
     }
     public void Simple() {

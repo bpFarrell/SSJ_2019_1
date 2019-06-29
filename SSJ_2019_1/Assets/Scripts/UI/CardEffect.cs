@@ -13,7 +13,7 @@ public class CardEffect{
         none // Unassigned/Uninitialized
     }
     // type of card effect
-    public CardType cardType;
+    public CardType cardType = CardType.none;
 
     // Shot Stats
     public enum ShotType {
@@ -37,15 +37,26 @@ public class CardEffect{
     public float recieveDamageScalar = 1f;
     public int receiveDamageModifier = 0;
     public ShotType shotType = ShotType.none;
-    
+
     // Player Stats
+    public float movementScalar = 1f;
     // 
 
     public void Load(CardDefinition def) {
         this.def = def;
+        // Meta
         duration = def.json["duration"].AsInt;
-        shotType = (ShotType)Enum.Parse(typeof(ShotType), def.json["shotType"]);
-        cardType = (CardType)Enum.Parse(typeof(CardType), def.json["cardType"]);
+        try {
+            shotType = (ShotType)Enum.Parse(typeof(ShotType), def.json["shotType"]);
+        }
+        catch { }
+        try
+        {
+            cardType = (CardType)Enum.Parse(typeof(CardType), def.json["cardType"]);
+        }
+        catch { }
+        //
+        // Projectiles
         shotCount = def.json["shotCount"].AsInt;
         shotSpeed = def.json["projectileSpeed"].AsFloat;
         shotCountScalar = def.json["shotCountScalar"].AsFloat;
@@ -56,6 +67,8 @@ public class CardEffect{
         shotSpread = def.json["shotSpread"].AsFloat;
         shotSpreadScalar = def.json["shotSpreadScalar"].AsFloat;
         shotSpreadModifier = def.json["shotSpreadModifier"].AsFloat;
+        //
+        // Player Stats
         recieveDamageScalar = def.json["recieveDamageScalar"].AsFloat;
         receiveDamageModifier = def.json["receiveDamageModifier"].AsInt;
     }

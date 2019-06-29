@@ -15,10 +15,13 @@ MonoBehaviour:
   _name: Turret
   _cost: 5
   _type: 2
+  _cClass: 2
+  _cardType: 0
   _description: (ally) Spawn a turret or cannon that auto shoots for some number of
     rounds.
   _flavor: 
   _assetName: turret
-  _projectilePrefab: {fileID: 0}
+  _projectilePrefab: {fileID: 490960442616065792, guid: c2a5e6b0138f025458d0ebc395854f13,
+    type: 3}
   jsonString: '{"name":"Turret","type":"U","class":"Pet","cost":5,"description":"(ally)
-    Spawn a turret or cannon that auto shoots for some number of rounds.","resourceName":"turret","cardType":"projectile","duration":-1,"projectileSpeed":2,"shotCount":1,"shotCountScalar":0,"shotCountModifier":0,"shotFrequency":2,"shotFrequencyScalar":0,"shotFrequencyModifier":0,"shotSpread":0,"shotSpreadScalar":0,"shotSpreadModifier":0,"shotType":"simple"}'
+    Spawn a turret or cannon that auto shoots for some number of rounds.","resourceName":"turret","cardType":"projectile","duration":-1,"projectileSpeed":2,"projectileSpeedScalar":1,"shotCount":1,"shotCountScalar":0,"shotFrequency":2,"shotFrequencyScalar":1,"shotSpread":0,"shotSpreadScalar":1,"shotType":"simple"}'

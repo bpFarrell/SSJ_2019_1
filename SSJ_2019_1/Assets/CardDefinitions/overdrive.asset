@@ -15,9 +15,12 @@ MonoBehaviour:
   _name: Overdrive
   _cost: 4
   _type: 2
+  _cClass: 1
+  _cardType: 1
   _description: Decreases the cost of every <b>Power<b> card this turn.
   _flavor: 
   _assetName: overdrive
-  _projectilePrefab: {fileID: 0}
+  _projectilePrefab: {fileID: 490960442616065792, guid: c2a5e6b0138f025458d0ebc395854f13,
+    type: 3}
   jsonString: '{"name":"Overdrive","type":"U","class":"Buff","cost":4,"description":"Decreases
-    the cost of every <b>Power<b> card this turn.","resourceName":"overdrive","cardType":"hand","duration":1,"projectileSpeed":1,"shotCount":0,"shotCountScalar":0,"shotCountModifier":0,"shotFrequency":0,"shotFrequencyScalar":0,"shotFrequencyModifier":0,"shotSpread":0,"shotSpreadScalar":0,"shotSpreadModifier":0}'
+    the cost of every <b>Power<b> card this turn.","resourceName":"overdrive","cardType":"hand","duration":1,"projectileSpeed":1,"projectileSpeedScalar":1,"shotCount":0,"shotCountScalar":0,"shotFrequency":0,"shotFrequencyScalar":0,"shotSpread":0,"shotSpreadScalar":0}'

@@ -35,6 +35,9 @@ public class Card : UIMonoBehaviour, ISelectHandler, IDeselectHandler, ICancelHa
     [SerializeField]
     private Text descText;
 
+    [SerializeField]
+    private Image shadow;
+
     private void Awake() { }
 
     public void OnSelect(BaseEventData eventData) {
@@ -48,6 +51,7 @@ public class Card : UIMonoBehaviour, ISelectHandler, IDeselectHandler, ICancelHa
     }
     public void OnCancel(BaseEventData eventData) {
         UIManager.skillManager.RemoveTab(definition);
+        UIManager.CETurnManager.RemoveEffect(definition);
     }
     public void OnSubmit(BaseEventData eventData) {
         Debug.Log("Selected Card: " + definition.name);
@@ -173,6 +177,10 @@ public class Card : UIMonoBehaviour, ISelectHandler, IDeselectHandler, ICancelHa
     public Pose displayPose = Pose.Empty();
 
     public void Update(){
+        int shadowVal = UIManager.skillManager.cardSelected(definition) ? 1 : 0;
+        Color col = shadow.color;
+        col.a = Mathf.Lerp(0f, .5f, shadowVal);
+        shadow.color = col;
         if (targetPose.equal(rectTransform)) return;
 
         Pose current = new Pose(rectTransform);

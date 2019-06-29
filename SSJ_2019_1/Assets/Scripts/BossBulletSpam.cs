@@ -114,6 +114,7 @@ public class BossBulletSpam : TimeObject
             else
                 lastHitAt = damageStack.Peek().Key;
             nextDeadTent--;
+            nextDeadTent = Mathf.Clamp(nextDeadTent, 0, tentColor.Length - 1);
             tentColor[nextDeadTent].SetActive(true);
             tentDepth[nextDeadTent].SetActive(true);
         }
@@ -123,6 +124,7 @@ public class BossBulletSpam : TimeObject
         TimeObject to = other.GetComponent<TimeObject>();
         to.Kill(GameManager.time);
         hp--;
+        nextDeadTent = Mathf.Clamp(nextDeadTent, 0, tentColor.Length-1);
         tentColor[nextDeadTent].SetActive(false);
         tentDepth[nextDeadTent].SetActive(false);
         nextDeadTent++;

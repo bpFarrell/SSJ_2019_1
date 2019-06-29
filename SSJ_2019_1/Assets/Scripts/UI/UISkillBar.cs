@@ -7,8 +7,10 @@ public class UISkillBar : UIMonoBehaviour {
     private SkillTab tabPrefab;
 
     private const float TOTALWIDTH = 1440;
-    private const int TOTALSLOTS = 10;
+    public const int TOTALSLOTS = 10;
     public static float costCoefficient { get { return TOTALWIDTH / TOTALSLOTS; } }
+    public static float tabTimeIncrement { get { return (GameManager.instance.turnLength / TOTALSLOTS); }
+    }
 
     public SkillTab[] tabList = new SkillTab[TOTALSLOTS];
 
@@ -70,7 +72,7 @@ public class UISkillBar : UIMonoBehaviour {
         tab.Load(def);
         MoveToSlot(tab, slot);
         // Timey Whimy Stuff
-        GameManager.time = SlotToGT(slot) - 0.2f;
+        //GameManager.time = SlotToGT(slot) - 0.2f;
 
         return slot;
     }
@@ -146,5 +148,13 @@ public class UISkillBar : UIMonoBehaviour {
             if(tabList[i] != null)
                 Gizmos.DrawSphere(first + (MainCanvas.transform.localScale.x * (Vector3.right * costCoefficient * i)), 20f);
         }
+    }
+
+    internal bool cardSelected(CardDefinition definition) {
+        for (int i = 0; i < TOTALSLOTS; i++) {
+            if (tabList[i] == null) continue;
+            if (tabList[i].definition == definition) return true;
+        }
+        return false;
     }
 }

@@ -17,16 +17,16 @@ public class UICenter : UISingletonBehaviour<UICenter>, ISelectHandler {
     }
     public void Update() {
         Player player = ReInput.players.GetPlayer(0);
-        if (player.GetButtonDown("BButton") && EventSystem.current.currentSelectedGameObject == gameObject) {
-            
+        if (EventSystem.current.currentSelectedGameObject == null && GameManager.instance.state == GameState.CARD_SELECT && player.GetAxis("DVertical") < 0) {
+            EventSystem.current.SetSelectedGameObject(selectable.FindSelectableOnDown().gameObject);
         }
         // Temp
-        if (player.GetButtonDown("XButton")) {
-            UIManager.handManager.ReceiveCard(CardResourceHandler.GetRandomCard());
-        }
-        if (player.GetButtonDown("YButton")) {
-            UIManager.handManager.RemoveCards();
-        }
+        //if (player.GetButtonDown("XButton")) {
+        //    UIManager.handManager.ReceiveCard(CardResourceHandler.GetRandomCard());
+        //}
+        //if (player.GetButtonDown("YButton")) {
+        //    UIManager.handManager.RemoveCards();
+        //}
     }
     private void StateChange(GameState old, GameState now) {
         if (now == GameState.CARD_SELECT) {
@@ -37,5 +37,8 @@ public class UICenter : UISingletonBehaviour<UICenter>, ISelectHandler {
             UIManager.handManager.hidden = true;
             UIManager.skillManager.SetHighlight(null);
         }
+    }
+    public static void DeselectAll() {
+        EventSystem.current.SetSelectedGameObject(instance.gameObject);
     }
 }

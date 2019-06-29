@@ -34,6 +34,7 @@ public class PlayerController : MonoBehaviour, ITimeObject {
         }
         Vector3 dir = new Vector3(player.GetAxis("MoveHori"), player.GetAxis("MoveVert"), 0);
         if (dir.magnitude > Mathf.Epsilon&&!GameManager.instance.isAtEndOfTurn) {
+            UICenter.DeselectAll();
             GameManager.time += dir.magnitude * Time.deltaTime * moveTimeScalar;
             CullBranch();
             transform.position += dir * moveSpeed;
@@ -84,6 +85,7 @@ public class PlayerController : MonoBehaviour, ITimeObject {
         float percentThroughFrame = (time - currentFrameTime) / poseSaveIntervals;
         int nowFrame = Mathf.Min(currentFrame, poses.Count - 1);
         int nextFrame = Mathf.Min(currentFrame + 1, poses.Count - 1);
+        if (poses.Count == 0) return transform.position;
         return Vector3.Lerp(
             poses[nowFrame],
             poses[nextFrame],

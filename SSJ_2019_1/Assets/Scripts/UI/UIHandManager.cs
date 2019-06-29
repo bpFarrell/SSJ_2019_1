@@ -49,12 +49,15 @@ public class UIHandManager : Parabola {
         c.handIndex = cardList.Count;
         cardList.Add(c);
 
-        int i = cardList.Count - 1;
-        if (i - 1 >= 0)
-        {
-            cardList[i - 1].SetRight(cardList[i].selectable);
-            cardList[i].SetLeft(cardList[i - 1].selectable);
+        int index = cardList.Count - 1;
+        if (index - 1 != -1) {
+            cardList[index - 1].SetRight(cardList[index].selectable);
+            cardList[index].SetLeft(cardList[index - 1].selectable);
         }
+
+        cardList[  0  ].SetLeft( cardList[index].selectable);
+        cardList[index].SetRight(cardList[  0  ].selectable);
+        
 
         width = (int)((steps * 150) * widthHiddenScalar);
 
@@ -87,7 +90,7 @@ public class UIHandManager : Parabola {
         if (slot == -1) return;
         CardEffect effect = new CardEffect();
         effect.Load(definition);
-        UIManager.CETurnManager.projectileEffects.Add(new KeyValuePair<float, CardEffect>(UISkillBar.SlotToGT(slot), effect));
+        UIManager.CETurnManager.AddEffect(UISkillBar.SlotToGT(slot), effect);
     }
 
     public void RemoveCards() {

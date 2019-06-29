@@ -102,6 +102,7 @@ public class TimeObject : MonoBehaviour, ITimeObject {
 
     }
     private void OnTurnComplete() {
+        if (this == null) return;
         if (timeState != TimeState.PendingCleanup) {
             Debug.Log("Setting pending cleanup on " + gameObject.name);
             timeState = TimeState.PendingCleanup;

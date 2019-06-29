@@ -25,6 +25,7 @@ public class CardEffect{
     // projectile
     public int duration = 0;
     public int shotCount = 0;
+    public float shotSpeed = 0f;
     public float shotCountScalar = 1f;
     public int shotCountModifier = 0;
     public float shotFrequency = 0f;
@@ -46,6 +47,7 @@ public class CardEffect{
         shotType = (ShotType)Enum.Parse(typeof(ShotType), def.json["shotType"]);
         cardType = (CardType)Enum.Parse(typeof(CardType), def.json["cardType"]);
         shotCount = def.json["shotCount"].AsInt;
+        shotSpeed = def.json["projectileSpeed"].AsFloat;
         shotCountScalar = def.json["shotCountScalar"].AsFloat;
         shotCountModifier = def.json["shotCountModifier"].AsInt;
         shotFrequency = def.json["shotFrequency"].AsFloat;

@@ -48,7 +48,6 @@ public class Card : UIMonoBehaviour, ISelectHandler, IDeselectHandler, ICancelHa
     }
     public void OnCancel(BaseEventData eventData) {
         UIManager.skillManager.RemoveTab(definition);
-        //EventSystem.current.SetSelectedGameObject(UICenter.instance.gameObject, eventData);
     }
     public void OnSubmit(BaseEventData eventData) {
         Debug.Log("Selected Card: " + definition.name);

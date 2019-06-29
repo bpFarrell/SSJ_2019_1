@@ -4,13 +4,32 @@ using UnityEngine;
 
 public class UIHandManager : Parabola {
     public int selectionIndex = -1;
+    public int handSize = 6;
     
     public List<Card> cardList = new List<Card>();
     public Card cardPrefab;
 
     public override int steps { get { return cardList.Count; } }
 
-    internal void Init() { }
+    internal void Init() {
+        GenerateHand();
+        GameManager.instance.OnNewTurn += NewTurn;
+        GameManager.instance.OnTurnComplete += TurnComplete;
+    }
+
+    private void NewTurn() {
+        GenerateHand();
+    }
+
+    private void GenerateHand() {
+        for (int i = 0; i < handSize; i++) {
+            ReceiveCard(CardResourceHandler.GetRandomCard());
+        }
+    }
+
+    private void TurnComplete() {
+        RemoveCards();
+    }
 
     internal void Cleanup() {
         RemoveCards();

@@ -62,7 +62,7 @@
 				float2 subUV = fmod(offset, texel * _Offset2.w) / (texel * _Offset2.w);
 				float v = saturate(1-distance(fixed2(0.5, 0.5), subUV) + cmyk[index]-.5)*0.7+0.2;
 				//return cmyk[index];
-				return smoothstep(0.2, 1, v)*v;
+				return smoothstep(.45, .55, v)*v;
 			}
 			fixed4 frag(v2f i) : SV_Target
 			{

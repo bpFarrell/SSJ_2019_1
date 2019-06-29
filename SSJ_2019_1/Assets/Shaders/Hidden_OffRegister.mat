@@ -27,4 +27,4 @@ Material:
     m_Colors:
     - _Offset: {r: 0.001, g: 0.002, b: -0.005, a: 0.0003}
     - _Offset1: {r: 0.5, g: 0.5, b: 1.25, a: 1}
-    - _Offset2: {r: 0, g: 0.5, b: 3, a: 4}
+    - _Offset2: {r: 0, g: 0.5, b: 3, a: 6}

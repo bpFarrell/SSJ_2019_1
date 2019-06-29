@@ -23,11 +23,15 @@ Material:
         m_Texture: {fileID: 2800000, guid: cdb863e89ee4870459028de74d897ffe, type: 3}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
+    - _Tex:
+        m_Texture: {fileID: 2800000, guid: cdb863e89ee4870459028de74d897ffe, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
     m_Floats:
     - _Fade: 1
     m_Colors:
     - _Center: {r: 0.61, g: 0.31, b: 16.33, a: 0.09}
-    - _Color: {r: 0, g: 0.25424433, b: 1, a: 1}
-    - _Grad: {r: 5.33, g: 0.1, b: -0.47, a: 1.42}
-    - _Pattern: {r: 7.43, g: 30, b: 0.54, a: -0.72}
-    - _Sun: {r: 0, g: 5.22, b: 0, a: 0.7}
+    - _Color: {r: 0.21000001, g: 0.7, b: 0.68870723, a: 1}
+    - _Grad: {r: 5.2193685, g: 0.04, b: -0.42, a: 0.07605823}
+    - _Pattern: {r: 2.5, g: 17.67, b: 2.12, a: 0}
+    - _Sun: {r: 0, g: -0.22841842, b: 7, a: 0.18015562}

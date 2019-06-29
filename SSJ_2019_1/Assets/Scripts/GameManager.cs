@@ -129,6 +129,9 @@ public class GameManager : MonoBehaviour {
         if (panelTransit) {
             PanelTransit();
         }
+        if (Input.GetKeyDown(KeyCode.F12)) {
+            GoToTitle();
+        }
         switch (state) {
             case GameState.TITLE:
                 IsTitle();
@@ -286,6 +289,12 @@ public class GameManager : MonoBehaviour {
     }
     public static void GoToTitle() {
         Application.LoadLevel("Title");
+    }
+    public static int GlobalTimeToTurn(float gt) {
+        return Mathf.FloorToInt(gt / instance.turnLength);
+    }
+    public static void ResetLevel() {
+        Application.LoadLevel(Application.loadedLevel);
         time = 0;
         ChangeState(GameState.TITLE);
     }

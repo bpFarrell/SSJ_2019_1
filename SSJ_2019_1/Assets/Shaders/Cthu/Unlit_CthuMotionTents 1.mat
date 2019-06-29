@@ -7,9 +7,9 @@ Material:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: Unlit_CthuMotionHead
+  m_Name: Unlit_CthuMotionTents 1
   m_Shader: {fileID: 4800000, guid: 4acb0b9d496d3bc42aa848919331a713, type: 3}
-  m_ShaderKeywords: 
+  m_ShaderKeywords: IS_TENTS
   m_LightmapFlags: 4
   m_EnableInstancingVariants: 0
   m_DoubleSidedGI: 0
@@ -35,4 +35,4 @@ Material:
     - _Decay: 9999
     - _Hurt: 0
     m_Colors:
-    - _Offsets: {r: 0, g: 0, b: 0, a: 9999}
+    - _Offsets: {r: 0, g: 0, b: 0, a: 999}

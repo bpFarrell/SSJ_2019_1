@@ -7,6 +7,7 @@ public class BossBulletSpam : TimeObject
     float lastSpawn;
     float spawnRate = 2;
     float lastHitAt=-1;
+    public int maxHP = 100;
     public int hp = 20;
     public Vector3 startPos;
     public float mag=1;
@@ -14,9 +15,20 @@ public class BossBulletSpam : TimeObject
     bool alternate;
     public GameObject renderObjects;
     Stack<KeyValuePair<float, float>> damageStack = new Stack<KeyValuePair<float, float>>();
-    public GameObject[] tentColor;
-    public GameObject[] tentDepth;
+    public MeshRenderer[] tentColor;
+    public MeshRenderer[] tentDepth;
+    public Material[] headMats;
     int nextDeadTent;
+    public bool isdying;
+    public float timeOfDeath;
+    float percentHP {
+        get { return ((float)hp) / ((float)maxHP); }
+    }
+    int currentLivingTentavles {
+        get {
+            return Mathf.FloorToInt(percentHP * (9 - Mathf.Epsilon));
+        }
+    }
     private void OnEnable() {
         GameManager.instance.OnNewTurn += OnNewTurn;
     }
@@ -31,12 +43,25 @@ public class BossBulletSpam : TimeObject
         evaluable.eval = (t) => { return new Vector3(0,
             Mathf.PerlinNoise(0, t*freq) * mag+ Mathf.PerlinNoise(2, t*freq*0.5f) * mag*2,0)+
             startPos; };
+        hp = maxHP;
+        for (int x = 0; x < tentColor.Length; x++) {
+            tentColor[x].material = new Material(tentColor[x].material);
+            tentDepth[x].material = new Material(tentDepth[x].material);
+        }
+
+        for (int x = 0; x < headMats.Length; x++) {
+            headMats[x].SetFloat("_Decay", 9999);
+        }
+
     }
 
     // Update is called once per frame
     void Update()
     {
-
+        if (isdying) {
+            IsDying();
+            return;
+        }
         TimeUpdate();
         CheckDamageRewind();
         if (dead) return;
@@ -50,6 +75,13 @@ public class BossBulletSpam : TimeObject
             //Simple();
             Volley();
             WaveSpawn();
+        }
+    }
+    void IsDying() {
+        transform.position -= new Vector3(1, 2, 1f)*Time.deltaTime;
+        transform.Rotate(new Vector3(20, -17, 8) * Time.deltaTime);
+        if (GameManager.time > timeOfDeath + 8) {
+            GameManager.ResetLevel();
         }
     }
     public void Simple() {
@@ -66,7 +98,7 @@ public class BossBulletSpam : TimeObject
         obj.Init(evaluable);
     }
     public void WaveSpawn() {
-        int count = alternate ? 10 : 9;
+        int count = (alternate ? 4 : 3)+nextDeadTent;
         for (int x = 0; x < count; x++) {
 
             float angle = ((float)x) / count;
@@ -85,7 +117,7 @@ public class BossBulletSpam : TimeObject
     }
     public void Volley() {
 
-        for (int x = 0; x < 4; x++) {
+        for (int x = 0; x < Mathf.Max(0, nextDeadTent*2); x++) {
 
             BulletPool obj = BulletPool.GetObject();
             obj.spawnTime = lastSpawn;
@@ -108,34 +140,51 @@ public class BossBulletSpam : TimeObject
         Shader.SetGlobalFloat("_BossHurt", 1-Mathf.Clamp01(((GameManager.time - lastHitAt) * 8)));
         if (damageStack.Count == 0) return;
         if (GameManager.time < damageStack.Peek().Key) {
+
+            int preHitCount = currentLivingTentavles;
             hp += (int)damageStack.Pop().Value;
             if (damageStack.Count == 0)
                 lastHitAt = -1;
             else
                 lastHitAt = damageStack.Peek().Key;
-            nextDeadTent--;
-            nextDeadTent = Mathf.Clamp(nextDeadTent, 0, tentColor.Length - 1);
-            tentColor[nextDeadTent].SetActive(true);
-            tentDepth[nextDeadTent].SetActive(true);
+            if (currentLivingTentavles != preHitCount) {
+                nextDeadTent--;
+                Debug.Log("Adding back tentacle " + nextDeadTent);
+                nextDeadTent = Mathf.Clamp(nextDeadTent, 0, tentColor.Length - 1);
+
+                tentColor[nextDeadTent].material.SetFloat("_Decay", 9999);
+                tentDepth[nextDeadTent].material.SetFloat("_Decay", 9999);
+            }
         }
     }
     private void OnTriggerEnter(Collider other) {
         //if (other.gameObject.layer == LayerMask.NameToLayer("EnemyBullet")) return;
         TimeObject to = other.GetComponent<TimeObject>();
         to.Kill(GameManager.time);
+        int preHitCount = currentLivingTentavles;
         hp--;
-        nextDeadTent = Mathf.Clamp(nextDeadTent, 0, tentColor.Length-1);
-        tentColor[nextDeadTent].SetActive(false);
-        tentDepth[nextDeadTent].SetActive(false);
-        nextDeadTent++;
         lastHitAt = GameManager.time;
+        if (currentLivingTentavles != preHitCount) {
+
+            Debug.Log("killing tentacle " + nextDeadTent);
+            nextDeadTent = Mathf.Clamp(nextDeadTent, 0, tentColor.Length - 1);
+            tentColor[nextDeadTent].material.SetFloat("_Decay", lastHitAt);
+            tentDepth[nextDeadTent].material.SetFloat("_Decay", lastHitAt);
+            nextDeadTent++;
+        }
         damageStack.Push(new KeyValuePair<float, float>(GameManager.time, 1));
         if (hp <= 0) {
             Debug.Log("Killed the boss!");
-            if(GameManager.instance.state== GameState.SIMULATE_PLAY)
+            if (GameManager.instance.state == GameState.SIMULATE_PLAY) {
                 GameManager.ChangeState(GameState.END);
+                isdying = true;
+                for (int x = 0; x < headMats.Length; x++) {
+                    headMats[x].SetFloat("_Decay", GameManager.time+1);
+                }
+                timeOfDeath = GameManager.time;
+            }
             Kill(GameManager.time);
-            renderObjects.SetActive(false);
+            //renderObjects.SetActive(false);
         }
     }
     void OnNewTurn() {

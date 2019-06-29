@@ -5,6 +5,8 @@
 		_MainTex("Texture", 2D) = "white" {}
 		_Normal("Normal", 2D) = "normal" {}
 		_Detail("Detail", 2D) = "black" {}
+		_Offsets("Offsets",Vector) = (0,0,0,0)
+		_Decay("Decay",Float) = 9999
     }
     SubShader
     {
@@ -50,12 +52,14 @@ Tags { "Queue" = "Transparent" "RenderType" = "Transparent" "IgnoreProjector" = 
 			sampler2D _Normal;
 			sampler2D _Detail;
 			float _BossHurt;
+			float4 _Offsets;
+			float _Decay;
 			//float _T;
 			v2f vert(appdata v,float4 vertex : POSITION, float3 normal : NORMAL, float4 tangent : TANGENT, float2 uv : TEXCOORD0)
 			{
                 v2f o;
 #if IS_TENTS
-				v.vertex = CthulTent(v.vertex, v.uv, v.uv2);
+				v.vertex = CthulTent(v.vertex, v.uv, v.uv2+_Offsets.x);
 #else
 				v.vertex = CthulMain(v.vertex);
 #endif
@@ -83,6 +87,10 @@ Tags { "Queue" = "Transparent" "RenderType" = "Transparent" "IgnoreProjector" = 
 
 			fixed4 frag(v2f i) : SV_Target
 			{
+				float decay = (_T - _Decay)*.3;
+				if (i.uv.y < decay) {
+					discard;
+			}
 				fixed4 col;
 				
 #if IS_DEPTH
@@ -102,6 +110,7 @@ Tags { "Queue" = "Transparent" "RenderType" = "Transparent" "IgnoreProjector" = 
 			col = fixed4(.8, i.worldPos.z, .5, 1);
 			col = tex2D(_MainTex, i.uv);
 			col += fixed4(1,.8,.8,1)*smoothstep(0.2,0.5,pow(tex2D(_Detail, i.uv),2))*_BossHurt*10;
+			col += (1-pow(smoothstep(decay, decay +0.1, i.uv.y),2));
 #endif
 
 			return col;

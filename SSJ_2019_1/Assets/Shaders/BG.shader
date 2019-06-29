@@ -2,7 +2,8 @@
 {
     Properties
     {
-        _MainTex ("Texture", 2D) = "white" {}
+		_MainTex("Texture", 2D) = "white" {}
+		_Tex("Tex", 2D) = "white" {}
 		_Color("Color",color) = (1,1,1,1)
 		_Sun("Sun",Vector) = (0,0,0,0)
 		_Grad("Grad",Vector)=(0,0,0,0)
@@ -37,8 +38,9 @@
                 float4 vertex : SV_POSITION;
             };
 
-            sampler2D _MainTex;
-            float4 _MainTex_ST;
+			sampler2D _MainTex;
+			sampler2D _Tex;
+			float4 _MainTex_ST;
 			float _T;
 			float4 _Sun;
 			float4 _Grad;
@@ -67,7 +69,7 @@
 				float2x2 rotMatPattern = float2x2(
 					cos(_Pattern.x), -sin(_Pattern.x), 
 					sin(_Pattern.x), cos(_Pattern.x));
-				fixed3 pattern = tex2D(_MainTex, mul(rotMatPattern,uv*_Pattern.y)).rgb;
+				fixed3 pattern = tex2D(_Tex, mul(rotMatPattern,uv*_Pattern.y)).rgb;
 				//return fixed4(1,1,1,1)*smoothstep(_Pattern.w, _Pattern.w, pattern[floor(_Pattern.z)]);
 				//return pattern.xyzz;
 

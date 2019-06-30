@@ -178,6 +178,9 @@ public class GameManager : MonoBehaviour {
     void IsResurecting() {
         Player player = ReInput.players.GetPlayer(0);
         float rewind = player.GetAxis("Rewind");
+        if (rewind != 0) {
+            TimeDisplay.SetState(TimeDisplayState.NONE);
+        }
         time -= Mathf.Pow(rewind, 4) * Time.deltaTime * 5;
         if (time < deathStartTime-0.2f)
             ChangeState(GameState.CARD_SELECT);
@@ -187,6 +190,7 @@ public class GameManager : MonoBehaviour {
         time += Time.deltaTime;
         if (currentDeathTime > deathPlayTime) {
             ChangeState(GameState.IS_RESURECTING);
+            TimeDisplay.SetState(TimeDisplayState.REWIND);
         }
     }
     void PlayTurn() {

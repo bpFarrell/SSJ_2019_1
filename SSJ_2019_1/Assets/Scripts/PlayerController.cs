@@ -21,6 +21,14 @@ public class PlayerController : MonoBehaviour, ITimeObject {
 
     float lastSpawn;
     float spawnRate = 1;
+    float diedAt;
+    bool isDying;
+    private void OnEnable() {
+        GameManager.instance.OnStateChange += OnStateChange;
+    }
+    void OnDisable() {
+        GameManager.instance.OnStateChange -= OnStateChange;
+    }
     private void Awake() {
         evaluable = new IEvaluable();
         evaluable.eval = (t) => { return GetPosAtTime(t); };
@@ -28,6 +36,11 @@ public class PlayerController : MonoBehaviour, ITimeObject {
     void Update() {
 
         Player player = ReInput.players.GetPlayer(0);
+        if (isDying) {
+            transform.eulerAngles = Vector3.forward * (GameManager.time - diedAt)*-20;
+            transform.position = evaluable.eval(GameManager.time) + new Vector3(1, -1, 0)*(GameManager.time - diedAt)*3;
+            return;
+        }
         if (GameManager.instance.state != GameState.CARD_SELECT || player.GetAxis("Rewind")!=0 || player.GetAxis("Fastforward")!=0) {
             transform.position = GetCurrentPos();                  
             return;
@@ -52,6 +65,12 @@ public class PlayerController : MonoBehaviour, ITimeObject {
                 ps.scheduledDeathTime = 5;
                 ps.Init(evaluable);
             }
+        }
+    }
+    void OnStateChange(GameState old, GameState now) {
+        if(now== GameState.CARD_SELECT) {
+            isDying = false;
+            transform.eulerAngles = Vector3.zero;
         }
     }
     void TryRecordPos() {
@@ -128,6 +147,9 @@ public class PlayerController : MonoBehaviour, ITimeObject {
     }
     private void StartDeath() {
         GameManager.ChangeState(GameState.IS_DYING);
+        diedAt = GameManager.time;
+        isDying = true;
+        PewParticleLogic.PlaceBoom(GameManager.instance.player.evaluable, diedAt, diedAt-Mathf.Epsilon);
         Debug.Log("You are dying!");
     }
 }
